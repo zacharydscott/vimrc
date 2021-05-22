@@ -1,34 +1,39 @@
+"      __  __   ______             ____     ____
+"     /\ \/\ \ /\__  _\   /'\_/`\ /\  _`\  /\  _`\
+"     \ \ \ \ \\/_/\ \/  /\      \\ \ \L\ \\ \ \/\_\
+"      \ \ \ \ \  \ \ \  \ \ \__\ \\ \ ,  / \ \ \/_/_
+"       \ \ \_/ \  \_\ \__\ \ \_/\ \\ \ \\ \ \ \ \L\ \
+"        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
+"         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
+"
+"""" Plugins
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': '.install.sh'}
 Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'kien/ctrlp.vim'
-Plug 'tpope/vim-surround' 
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'morhetz/gruvbox'
-" Plug 'dyng/ctrlsf.vim'
-" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-" Plug 'junegunn/fzf.vim'
-Plug 'stefandtw/quickfix-reflector.vim'
-Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'jremmen/vim-ripgrep'
-Plug 'mileszs/ack.vim'
-Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-fugitive'
+Plug 'kien/ctrlp.vim'
+Plug 'jremmen/vim-ripgrep'
+Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'morhetz/gruvbox'
+Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'mattn/emmet-vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'zdscott/vim-projects'
-Plug 'zdscott/vim-terminal'
-" Plug 'jceb/vim-orgmode'
+Plug 'honza/vim-snippets'
 call plug#end()
 
-" Sensible Default Settings
+"""" Settings
+""" Basics
 set wildignore+=node_modules/**
 set clipboard=unnamedplus
 set t_Co=256
 set number relativenumber
 set hidden
+set ic
 set nocompatible
 set tabstop=4
 set encoding=UTF-8
@@ -39,131 +44,132 @@ set splitbelow
 set splitright
 set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
 set expandtab
-set statusline=%f\ -\ %y
-
 let mapleader= " "
+
+"" Status Line
+set statusline=
+set statusline+=\ %n\           " buffer number
+set statusline+=\ %M\                       " modified [+] flag
+set statusline+=%f\ -\ %y\ %{FugitiveHead()} 
+set statusline+=%{&paste?'\ PASTE\ ':''}
+set statusline+=%{&spell?'\ SPELL\ ':''}
+set statusline+=%#CursorIM#     " colour
+set statusline+=%R                        " readonly flag
+set statusline+=%#Cursor#               " colour
+set statusline+=%#CursorLine#     " colour
+set statusline+=%=                          " right align
+set statusline+=%#CursorLine#   " colour
+set statusline+=\ %Y\                   " file type
+set statusline+=%#CursorIM#     " colour
+set statusline+=\ %3l:%-2c\         " line + column
+set statusline+=%#Cursor#       " colour
+
+"" Global Variables
+let g:python3_host_prog = $PYTHON
 let g:vim_projects_path = $VIMROOT . '/projects/projects.txt'
 let g:terminal_config =[{'load_command': 'npm run local', 'push_command': 'npm run local'},{ 'push_command': ''}]
 
+"" Style
+colorscheme gruvbox
+hi Normal guibg=NONE ctermbg=NONE
 
-" disable arrow ke and ':''. I Should also map on visual mode but there is a
-" complication with the 'i' operator.
+"""" Mappings
+""" General
+"" Custom Text Objects
+" onoremap r iw
+" onoremap R iW
+" onoremap x aw
+" onoremap X aW
+
+"" Disable Arrow Keys
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
-nnoremap : <nop>
-vnoremap : <nop>
-nnoremap <Del> :
-vnoremap <Del> :
+nnoremap <Tab> :
+vnoremap <Tab> :
 
-" This Looks quite arbitary, but I am using the Colemak keybord layout. This
-" will maintain the 'hjkl' home row for my 'hnei'.
+"" Colemak Navigation
 nnoremap n j
+nnoremap N J
 nnoremap e k
 nnoremap i l
 
 nnoremap l i
 nnoremap j e
 nnoremap k n
-
-nnoremap N J
-nnoremap E K
-nnoremap I L
-
-nnoremap L I
-nnoremap J E
 nnoremap K N
 
 vnoremap n j
 vnoremap e k
+
 vnoremap j e
 vnoremap k n
 
-vnoremap N J
-vnoremap E K
-vnoremap I L
+nnoremap <C-w>h <C-w>h
+nnoremap <C-w>n <C-w>j
+nnoremap <C-w>e <C-w>k
+nnoremap <C-w>i <C-w>l
+nnoremap <C-w>H <C-w>H
+nnoremap <C-w>N <C-w>J
+nnoremap <C-w>E <C-w>K
+nnoremap <C-w>I <C-w>L
 
-vnoremap L I
-vnoremap J E
-vnoremap K N
+"" Quick Window Switching
+nnoremap <A-n> <C-w>j
+nnoremap <A-h> <C-w>h
+nnoremap <A-e> <C-w>k
+nnoremap <A-i> <C-w>l
 
-" Basic visual buffer navigation based on 'hjkl' movement.
-nnoremap <C-h> <C-w>h
-nnoremap <C-n> <C-w>j
-nnoremap <C-e> <C-w>k
-nnoremap <C-i> <C-w>l
-" Rearrange Buffers.
-nnoremap <A-n> <C-w>J
-nnoremap <A-h> <C-w>H
-nnoremap <A-e> <C-w>K
-nnoremap <A-i> <C-w>L
-
+"" Alt Keys
 nnoremap <A-o> o<esc>
 nnoremap <A-O> O<esc>
-nnoremap <C-w> <C-e>
-nnoremap <C-p> <C-y>
-nnoremap <C-m> <C-i>
-nnoremap <C-l> :m+<CR>
-nnoremap <C-y> :m-2<CR>
-nnoremap <Leader>a ggVG
+nnoremap <A-l> :set hls!<CR>
+nnoremap <A-s> :set spell!<CR>
 
+"" Misc
+nnoremap <C-n> <C-i>
 nnoremap _ :split<CR>
 nnoremap - :vsplit<CR>
 
 "" '\' Operates as a kind of secondary leader.
-" some nonstandard but useful operators. Delete into the non default register
-" if useful data is stored there. Last is to copy line without newline
-nnoremap <bslash>d "ud
-nnoremap <bslash>c "uc
-nnoremap <bslash>x "ux
-nnoremap <bslash>x "ux
-nnoremap <bslash>y ^v$<Left>y
-" From my plugin
 nnoremap <bslash>p :ProjectMenu<CR>
 
-" Quickfix
-nnoremap <C-c>o :bot copen<CR>
-nnoremap <C-c>i :bot cclose<CR>
-nnoremap <C-c>n :cnext<CR>
-nnoremap <C-c>e :cprevious<CR>
+"" Quickfix
+nnoremap <C-q>o :bot copen<CR>
+nnoremap <C-q>i :bot cclose<CR>
+nnoremap <C-q>n :cnext<CR>
+nnoremap <C-q>e :cprevious<CR>
 
-" CMD line Remap
-cnoremap <C-n> <Down>
-cnoremap <C-e> <Up>
 
-"" Leader Key Maps
+""" Leader Key Maps
+"" Search
+nnoremap <Leader>s :%s//g<left><Left>
+vnoremap <Leader>s :s//g<left><Left>
+nnoremap <Leader>S :'{,'}s//g<left><Left>
 
-" Search
-nnoremap <Leader>r :%s//g<left><Left>
-vnoremap <Leader>r :s//g<left><Left>
-nnoremap <Leader>R :'{,'}s//g<left><Left>
-
-" Buffer Controls
+"" Buffer Controls
 nnoremap <Leader>w :w<CR>
-nnoremap <Leader>s :Rg -i ""<Left>
-nnoremap <Leader>S :Rg<Space>
+nnoremap <Leader>W :w!<CR>
+nnoremap <Leader>r :Rg -i ""<Left>
+nnoremap <Leader>R :Rg<Space>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>Q :q!<CR>
+
+"" Tab
 nnoremap <Leader>v :tabnew<CR>
 nnoremap <Leader>t gt
 nnoremap <Leader>T gT
 let g:ctrlp_map = '<Leader>p'
 nnoremap <Leader>P \:CtrlP<CR>
 
-nnoremap <Leader>j :let @j = expand("%:t")<CR>
-nnoremap <Leader>J :let @j = expand("%:p")<CR>
-
-" loader for specific directories
-nnoremap <Leader>l <Plug>(coc-rename)
-
-" Window Size
+"" Window Size
 nnoremap <Leader>_ :resize +15<CR>
 nnoremap <Leader>+ :resize -15<CR>
 nnoremap <Leader>= :vertical resize +15<CR>
 nnoremap <Leader>- :vertical resize -15<CR>
 
-" Git resolve maps
+"" Git
 nnoremap <Leader>gt :G<Space>
 nnoremap <Leader>gg :G<CR>
 nnoremap <Leader>gs :call GitAddAndCheck()<CR>
@@ -176,11 +182,13 @@ nnoremap <Leader>gF :Git fetch --all<CR>
 nnoremap <Leader>gb :Gblame<CR>
 nnoremap <Leader>gm :Magit<CR>
 nnoremap <Leader>gc :call GitCommit("")<Left><Left>
+nnoremap <Leader>go :G checkout<Space>
+nnoremap <Leader>ge :G merge<Space>
 nnoremap <Leader>gh :diffget //2<CR>
 nnoremap <Leader>gi :diffget //3<CR>
 " nnoremap <Leader>gU :Git push --all<CR> "This is a bit dangerous
 
-" COC
+"" CoC
 nmap <silent> <Leader>D <Plug>(coc-diagnostic-prev)
 nmap <silent> <Leader>d <Plug>(coc-diagnostic-next)
 nmap <silent> gd <Plug>(coc-definition)
@@ -189,19 +197,19 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" NERD Tree
+"" NERD Tree
 nnoremap <Leader>nf :NERDTreeFind<CR>
 nnoremap <Leader>o :NERDTreeToggle<CR>
 nnoremap <Leader>or :NERDTreeFind<CR>
 
-" Formatting
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+"" Formatting
+xmap <leader>f  :PrettierPartial<CR>
+nmap <leader>f  :PrettierPartial<CR>
 xmap <leader>ff :Prettier<CR>
 nmap <leader>ff :Prettier<CR>
 
 
-" Mmapping for specific macros in Angular.
+"" Angular Splits
 nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
 nnoremap <Leader>xt :call AngularVsplitMatch("ts","v")<CR>
 nnoremap <Leader>xd :call AngularVsplitMatch("spec.ts","v")<CR>
@@ -226,55 +234,129 @@ nnoremap <Leader>zc :call AngularVsplitMatch("css","n")<CR>
 nnoremap <Leader>zz :call AngularVsplitMatchDefault("n")<CR>
 nnoremap <Leader>z :call AngularVsplitMatchDefault("n")<CR>
 
-"" Extras
+"" Meta Shortcuts
 nnoremap <Leader>kc :Config<CR>
+nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
 nnoremap <Leader>kr :Reload<CR>
 nnoremap <Leader>kp :CtrlPClearCache<CR>
-" From my Plugin
+
+"" MISC
+nnoremap <Leader>a ggVG
+nnoremap <Leader>. @:
+
+""" Imap
+"" Snipmate remap
+imap <C-n> <Plug>snipMateNextOrTrigger
+smap <C-n> <Left><Right><Plug>snipMateNextOrTrigger
+imap <C-e> <Plug>snipMateShow
+smap <C-n> <Left><Right><Plug>snipMateNextOrTrigger
+inoremap <C-s> <C-r>"
+snoremap <C-s> <C-r>"
+
+"" CoC
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <TAB> 
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"" Misc
 nnoremap <Leader>y :TerminalTabToggle<CR> 
-"" Control Maps
 
 
-" TODO quickfix population
-nnoremap <F9> :grep TODO <CR> :copen <CR>
-nnoremap <Leader>m :call LoadQuickfix("")<Left><Left>
+""" Command Mode
+cnoremap <C-n> <Down>
+cnoremap <C-e> <Up>
+cnoremap <C-s> <C-r>"
 
-"" Custom Text Objects
-onoremap r iw
-onoremap R iW
-onoremap x aw
-onoremap X aW
+"""" Abbreviations
+""" General
+iabbrev mes Zachary Scott
+iabbrev mef Zachary Douglas Scott
+iabbrev dates <C-R>=strftime("%Y-%m-%d")<CR>
+iabbrev datet <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
 
-
-function JSFunctionNav()
-  execute ":normal! { ?\\v(['\"`].*)@<!function\<CR>"
+""" JS
+function JSAbbrev()
+  iabbrev <buffer> rt return
+  iabbrev <buffer> fn function
+  iabbrev <buffer> ext export
+  iabbrev <buffer> cnt constructor
+  iabbrev <buffer> pre private
+  iabbrev <buffer> pbl public
+  iabbrev <buffer> udf undefined
+  iabbrev <buffer> tr true
+  iabbrev <buffer> fa true
 endfunction
 
-function JSFunctionArg()
-  let lastSearch = @/
-  call JSFunctionNav()
-  execute ":normal! /(\<CR>vib"
-  let @/ = lastSearch
+""" TS
+function TSAbbrev()
+  iabbrev <buffer> st String
+  iabbrev <buffer> num number
 endfunction
 
-function JSFunctionName()
-  let lastSearch = @/
-  call JSFunctionNav()
-  execute ":normal! el/\\w\<CR>viw"
-  let @/ = lastSearch
+"""" Custom Commands
+command! Reload execute ":so $XDG_CONFIG_HOME/nvim/init.vim"
+command! Config execute ":e $XDG_CONFIG_HOME/nvim/init.vim"
+
+"set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.yardoc/*,*.exe,*.so,*.dat,/node_modules/*
+
+"let g:livepreview_previewer = 'zathura'
+
+let &t_SI = "\<esc>[5 q"
+let &t_SR = "\<esc>[5 q"
+let &t_EI = "\<esc>[2 q"
+
+"""" plugin configuration
+""" nerd tree
+let NERDTreeMapOpenExpl="E" " free up the 'e' key to be used for something else
+let NERDTreeMenuUp="e"
+let nerdtreemenudown='n'
+let nerdtreemapopensplit='j'
+let nerdtreeminimalui = 1
+let nerdtreedirarrows = 1
+let g:nerdtreechdirmode = 2
+
+augroup nerd_tree
+  autocmd!
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:nerdtree") && b:nerdtree.istabtree()) | q | endif
+augroup end
+
+""" coc settings
+let g:coc_global_extensions = [
+      \ 'coc-pairs',
+      \ 'coc-tsserver',
+      \ 'coc-eslint',
+      \ 'coc-json',
+      \ 'coc-angular',
+      \]
+
+function! s:check_back_space() abort
+  let col = col('.') -1
+  return !col || getline('.')[col - 1]=~# '\s'
 endfunction
 
-"" Auto Commands
+""" snipmate
+let g:snipmate = { 'snippet_version' : 1 }
+
+""" Ctrl-P
+let g:ctrlp_custom_igrnoe = 'node_modules\|git'
+let g:ackprg = 'rg --vimgrep --smart-case'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
+
+
+"""" File Auto Commands
 augroup VIM
   autocmd!
   autocmd BufWritePost *.vim,*.vimrc Reload
-augroup END
-
-augroup JS_TS
-  autocmd!
-  autocmd FileType javascript,typescript call JSAbbrev() "just pulling into a function for readabilty
-  autocmd FileType javascript,typescript onoremap af :<C-u>call JSFunctionArg()<CR>
-  autocmd FileType javascript,typescript onoremap ef :<C-u>call JSFunctionName()<CR>
 augroup END
 
 augroup HTML
@@ -292,10 +374,6 @@ augroup MD
   autocmd FileType md onoremap ii :normal DD?\*<CR><Right><Right>v/\*<CR>
 augroup END
 
-augroup NERD_TREE
-  autocmd!
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-augroup END
 
 augroup MISC
   autocmd!
@@ -305,120 +383,12 @@ augroup MISC
   autocmd User ProjectChanged if filereadable("./.vimrc") | execute ":so .vimrc" | endif
   autocmd TermOpen * nnoremap <buffer> - :vsplit<cr>:term<cr> | 
         \ nnoremap <Leader>q :bw!<cr> | 
-    \ nnoremap <C-c> i<C-c> | 
-     \ inoremap <A-n> <C-\><C-n>
+        \ nnoremap <C-c> i<C-c> | 
+        \ inoremap <A-n> <C-\><C-n>
 augroup END
-" short term
-" xnoremap i, T,ot,
-" onoremap i, :normal vi,<CR>
-" xnoremap a, T,of,
-" onoremap a, :normal va,<CR>
 
-let NERDTreeMapOpenExpl='k'
-let NERDTreeMenuDown='e'
-let NERDTreeMenuUp='i'
-let NERDTreeMapOpenSplit='j'
-let g:NERDTreeChDirMode = 2
-
-"" theme
-colorscheme gruvbox
-" hi Normal guibg=NONE ctermbg=NONE
-
-"" ctrl-p
-let g:ctrlp_custom_igrnoe = 'node_modules\|git'
-
-" set nerdtree settings
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-
-"" COC settings
-let g:coc_global_extensions = [
-      \ 'coc-snippets',
-      \ 'coc-pairs',
-      \ 'coc-tsserver',
-      \ 'coc-eslint',
-      \ 'coc-json',
-      \ 'coc-angular',
-      \]
-
-"" Snipmate remap
-imap <C-e> <C-x><Plug>snipMateNextOrTrigger
-smap <C-e> <Left><Right><Plug>snipMateNextOrTrigger
-smap <C-i> <Left><Right><Plug>snipMateBack
-imap <C-i> <Left><Right><Plug>snipMateBack
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-"g:snipMate.always_choose_first
-inoremap <silent><expr> <c-space> coc#refresh()
-
-"" commands
-command! Reload execute ":so $VIMROOT"
-command! Config execute ":e $VIMROOT"
-
-" Some crazy COC thing going on here
-function! s:check_back_space() abort
-  let col = col('.') -1
-  return !col || getline('.')[col - 1]=~# '\s'
-endfunction
-
-"" map tab for autocompletion
-inoremap <silent><expr> <TAB> 
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-"" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-" xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-" omap af <Plug>(coc-funcobj-a)
-"" variables
-let g:ackprg = 'rg --vimgrep --smart-case'
-
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
-"set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.yardoc/*,*.exe,*.so,*.dat,/node_modules/*
-
-"let g:livepreview_previewer = 'zathura'
-
-let &t_SI = "\<esc>[5 q"
-let &t_SR = "\<esc>[5 q"
-let &t_EI = "\<esc>[2 q"
-
-" Small utility abbreviations
-iabbrev mes Zachary Scott
-iabbrev mef Zachary Douglas Scott
-iabbrev dates <C-R>=strftime("%Y-%m-%d")<CR>
-iabbrev datet <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
-
-function JSAbbrev()
-  iabbrev <buffer> rt return
-  iabbrev <buffer> fn function
-  iabbrev <buffer> ex export
-  iabbrev <buffer> con constructor
-  iabbrev <buffer> pr private
-  iabbrev <buffer> pb public
-  iabbrev <buffer> und undefined
-  iabbrev <buffer> tr true
-  iabbrev <buffer> fa true
-endfunction
-
-function TSAbbrev()
-  iabbrev <buffer> st String
-  iabbrev <buffer> num number
-endfunction
-
-let g:python3_host_prog = $PYTHON
-
-"just for my weird windows thing
-"" function space
+"""" Functions
+""" Angular Split
 function! AngularVsplitMatch(targ, direction)
   let path = substitute(expand("%"),"\.[A-z]*$",".".a:targ,"")
   if (a:direction =~ "v")
@@ -438,6 +408,7 @@ function! AngularVsplitMatchDefault(direction)
   endif
 endfunction
 
+""" Git Shortcuts
 function! GitAddAndCheck()
   Git add .
   Git diff --cached
@@ -446,3 +417,45 @@ endfunction
 function! GitCommit(message)
   execute "Git commit -m \"".a:message."\""
 endfunction
+
+""" Vimrc Folding
+function! VimFolds(lnum)
+  let s:thisline = getline(a:lnum)
+  if match(s:thisline, '^"""" ') >= 0
+    return '>1'
+  endif
+  if match(s:thisline, '^""" ') >= 0
+    return '>2'
+  endif
+  if match(s:thisline, '^"" ') >= 0
+    return '>3'
+  endif
+  return '='
+endfunction
+
+function! VimFoldText()
+  " handle special case of normal comment first
+  let s:info = '('.string(v:foldend-v:foldstart).' l)'
+  if v:foldlevel == 1
+    let s:line = ' ◇ '.getline(v:foldstart)[5:]
+  elseif v:foldlevel == 2
+    let s:line = '  ●  '.getline(v:foldstart)[4:]
+  elseif v:foldlevel == 3
+    let s:line = '   ▪ '.getline(v:foldstart)[3:]
+  endif
+  if strwidth(s:line) > 80 - len(s:info) - 3
+    return s:line[:79-len(s:info)-3+len(s:line)-strwidth(s:line)].'...'.s:info
+  else
+    return s:line.repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
+  endif
+endfunction
+
+augroup fold_vimrc
+  autocmd!
+  autocmd FileType vim nnoremap <buffer> <CR> za
+  autocmd FileType vim
+        \ setlocal foldmethod=expr |
+        \ setlocal foldexpr=VimFolds(v:lnum) |
+        \ setlocal foldtext=VimFoldText() |
+  "              \ set foldcolumn=2 foldminlines=2
+augroup END
