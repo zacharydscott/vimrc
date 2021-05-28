@@ -8,15 +8,21 @@
 "
 """" Plugins
 call plug#begin('~/.vim/plugged')
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': '.install.sh'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': '.install.sh'}
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-fugitive'
-Plug 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'sharkdp/fd'
 Plug 'jremmen/vim-ripgrep'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'Xuyuap/nerdtree-git-plugin'
 Plug 'morhetz/gruvbox'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mattn/emmet-vim'
@@ -24,12 +30,21 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'hrsh7th/nvim-compe'
+Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
-"""" Settings
+"""" External Files
+" source ./custom-text.vim
+so $XDG_CONFIG_HOME/nvim/lua/config.vim
+"
+"
+"" Settings
 """ Basics
 set wildignore+=node_modules/**
 set clipboard=unnamedplus
+set completeopt=menuone,noselect
 set t_Co=256
 set number relativenumber
 set hidden
@@ -44,7 +59,9 @@ set splitbelow
 set splitright
 set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
 set expandtab
+set noswapfile
 let mapleader= " "
+au VimEnter * GuiPopupmenu 0
 
 "" Status Line
 set statusline=
@@ -76,10 +93,22 @@ hi Normal guibg=NONE ctermbg=NONE
 """" Mappings
 """ General
 "" Custom Text Objects
-" onoremap r iw
-" onoremap R iW
-" onoremap x aw
-" onoremap X aW
+onoremap in( :<c-u>silent! normal! f(vi(
+vnoremap in( <esc>f(vi(
+onoremap in) :silent! normal! f(vi(<cr>
+vnoremap in) <esc> f(vi(
+onoremap il( :silent! normal! F)vi(<cr>
+vnoremap il( <esc> F)vi(
+onoremap il) :silent! normal! F)vi(<cr>
+vnoremap il) <esc> F)vi(
+onoremap an( :silent! normal! f(va(<cr>
+vnoremap an( <esc> f(va(
+onoremap an) :silent! normal! f(va(<cr>
+vnoremap an) <esc> f(va(
+onoremap al( :silent! normal! F)va(<cr>
+vnoremap al( <esc> F)va(
+onoremap al) :silent! normal! F)va(<cr>
+vnoremap al) <esc> F)va(
 
 "" Disable Arrow Keys
 noremap <Up> <Nop>
@@ -93,18 +122,26 @@ vnoremap <Tab> :
 nnoremap n j
 nnoremap N J
 nnoremap e k
+nnoremap E K
 nnoremap i l
+nnoremap I L
 
 nnoremap l i
+nnoremap L I
 nnoremap j e
+nnoremap J E
 nnoremap k n
 nnoremap K N
 
 vnoremap n j
+vnoremap N J
 vnoremap e k
+vnoremap E K
 
 vnoremap j e
+vnoremap J E
 vnoremap k n
+vnoremap K N
 
 nnoremap <C-w>h <C-w>h
 nnoremap <C-w>n <C-w>j
@@ -157,12 +194,12 @@ nnoremap <Leader>q :q<CR>
 nnoremap <Leader>Q :q!<CR>
 
 "" Tab
-nnoremap <Leader>v :tabnew<CR>
-nnoremap <Leader>t gt
-nnoremap <Leader>T gT
-let g:ctrlp_map = '<Leader>p'
-nnoremap <Leader>P \:CtrlP<CR>
-
+" nnoremap <Leader>v :tabnew<CR>
+" nnoremap <Leader>t gt
+" nnoremap <Leader>T gT
+" let g:ctrlp_map = '<Leader>p'
+" nnoremap <Leader>P \:CtrlP<CR>
+nnoremap <leader>p <cmd>Telescope find_files<cr>
 "" Window Size
 nnoremap <Leader>_ :resize +15<CR>
 nnoremap <Leader>+ :resize -15<CR>
@@ -179,7 +216,7 @@ nnoremap <Leader>gu :Git push<CR>
 nnoremap <Leader>ga :Git status<CR>
 nnoremap <Leader>gf :Git fetch<CR>
 nnoremap <Leader>gF :Git fetch --all<CR>
-nnoremap <Leader>gb :Gblame<CR>
+nnoremap <Leader>gb :G blame<CR>
 nnoremap <Leader>gm :Magit<CR>
 nnoremap <Leader>gc :call GitCommit("")<Left><Left>
 nnoremap <Leader>go :G checkout<Space>
@@ -189,13 +226,13 @@ nnoremap <Leader>gi :diffget //3<CR>
 " nnoremap <Leader>gU :Git push --all<CR> "This is a bit dangerous
 
 "" CoC
-nmap <silent> <Leader>D <Plug>(coc-diagnostic-prev)
-nmap <silent> <Leader>d <Plug>(coc-diagnostic-next)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gD \<Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> <Leader>D <Plug>(coc-diagnostic-prev)
+" nmap <silent> <Leader>d <Plug>(coc-diagnostic-next)
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gD \<Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
 "" NERD Tree
 nnoremap <Leader>nf :NERDTreeFind<CR>
@@ -246,28 +283,28 @@ nnoremap <Leader>. @:
 
 """ Imap
 "" Snipmate remap
-imap <C-n> <Plug>snipMateNextOrTrigger
-smap <C-n> <Left><Right><Plug>snipMateNextOrTrigger
-imap <C-e> <Plug>snipMateShow
-smap <C-n> <Left><Right><Plug>snipMateNextOrTrigger
-inoremap <C-s> <C-r>"
-snoremap <C-s> <C-r>"
+" imap <C-n> <Plug>snipMateNextOrTrigger
+" smap <C-n> <Left><Right><Plug>snipMateNextOrTrigger
+" imap <C-e> <Plug>snipMateShow
+" smap <C-n> <Left><Right><Plug>snipMateNextOrTrigger
+" inoremap <C-s> <C-r>"
+" snoremap <C-s> <C-r>"
 
 "" CoC
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <silent><expr> <TAB> 
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+" nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+" inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+" inoremap <silent><expr> <c-space> coc#refresh()
+" inoremap <silent><expr> <TAB> 
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent><expr> <c-space> coc#refresh()
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <c-space> coc#refresh()
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 "" Misc
 nnoremap <Leader>y :TerminalTabToggle<CR> 
 
@@ -276,6 +313,7 @@ nnoremap <Leader>y :TerminalTabToggle<CR>
 cnoremap <C-n> <Down>
 cnoremap <C-e> <Up>
 cnoremap <C-s> <C-r>"
+
 
 """" Abbreviations
 """ General
@@ -352,11 +390,12 @@ let g:ctrlp_custom_igrnoe = 'node_modules\|git'
 let g:ackprg = 'rg --vimgrep --smart-case'
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
 
-
+""" Emmet
+let g:user_emmet_leader_key="<c-y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
-  autocmd BufWritePost *.vim,*.vimrc Reload
+  autocmd BufWritePost *.vim,*.vimrc,C:/Users/wb549004/.config/nvim/*.lua Reload
 augroup END
 
 augroup HTML
