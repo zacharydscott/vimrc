@@ -1,17 +1,12 @@
---- Mappings
-vim.api.nvim_set_keymap('n','<leader>p',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
-vim.api.nvim_set_keymap('n','<leader>tt',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
-vim.api.nvim_set_keymap('n','<leader>tb',':lua require(\'telescope.builtin\').buffers()<cr>', opts)
-vim.api.nvim_set_keymap('n','<leader>tg',':lua require(\'telescope.builtin\').git_branches()<cr>', opts)
-vim.api.nvim_set_keymap('n','<leader>tv',':lua require(\'telescopic\').search_vim_config()<cr>', opts)
-
 --- Telescope Config
 local actions = require('telescope.actions')
 require('telescope').setup{
   defaults = {
     vimgrep_arguments = {
-      'fd',
-      '-i'
+      'rg',
+      '--files',
+      '-g',
+      -- '!node_modules/**'
     },
     -- extensions = {
     --   fzy_native = {
@@ -72,12 +67,33 @@ require('telescope').setup{
 local M = {}
 --- Custom Functions
 function M.search_vim_config()
-  print('eirsen')
+  local conf_dir = os.getenv('XDG_CONFIG_HOME')
   require('telescope.builtin').find_files({
     prompt_title = "Nvim Config Files",
-    cwd = 'C:/users/wb549004/.Config/nvim'
+    cwd = (conf_dir and conf_dir..'/nvim') or 'C:/users/wb549004/.Config/nvim'
   })
 end
+
+function M.search_rg()
+  require('telescope.builtin').find_files({
+    prompt_title = 'Rip Grep',
+    find_command = {
+      'rg',
+      '--files',
+      '-g',
+      '!node_modules/**',
+    }
+  })
+end
+
+
+--- Mappings
+vim.api.nvim_set_keymap('n','<leader>p',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>tt',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>tb',':lua require(\'telescope.builtin\').buffers()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>tg',':lua require(\'telescope.builtin\').git_branches()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>tr',':lua require(\'telescope.builtin\').live_grep()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>tv',':lua require(\'telescopic\').search_vim_config()<cr>', opts)
 
 return M
 -- require('telescope').load_extension('fzy_native')

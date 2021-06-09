@@ -13,6 +13,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground',
+" Plug 'nvim-treeline',
 Plug 'tpope/vim-fugitive'
 " Plug 'kien/ctrlp.vim'
 Plug 'nvim-lua/popup.nvim'
@@ -31,7 +33,8 @@ Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'hrsh7th/nvim-compe'
+" Plug 'hrsh7th/nvim-compe'
+Plug 'nvim-lua/completion-nvim'
 Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
@@ -61,25 +64,27 @@ set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
 set expandtab
 set noswapfile
 let mapleader= " "
-au VimEnter * GuiPopupmenu 0
+if has('GuiPopupmenu')
+  au VimEnter * GuiPopupmenu 0
+endif
 
 "" Status Line
-set statusline=
-set statusline+=\ %n\           " buffer number
-set statusline+=\ %M\                       " modified [+] flag
-set statusline+=%f\ -\ %y\ %{FugitiveHead()} 
-set statusline+=%{&paste?'\ PASTE\ ':''}
-set statusline+=%{&spell?'\ SPELL\ ':''}
-set statusline+=%#CursorIM#     " colour
-set statusline+=%R                        " readonly flag
-set statusline+=%#Cursor#               " colour
-set statusline+=%#CursorLine#     " colour
-set statusline+=%=                          " right align
-set statusline+=%#CursorLine#   " colour
-set statusline+=\ %Y\                   " file type
-set statusline+=%#CursorIM#     " colour
-set statusline+=\ %3l:%-2c\         " line + column
-set statusline+=%#Cursor#       " colour
+" set statusline=%!luaeval('require([[treeline]]).get_treeline()') 
+" set statusline+=\ %n\           " buffer number
+" set statusline+=\ %M\                       " modified [+] flag
+" set statusline+=%f\ -\ %y\ %{FugitiveHead()} 
+" set statusline+=%{&paste?'\ PASTE\ ':''}
+" set statusline+=%{&spell?'\ SPELL\ ':''}
+" set statusline+=%#CursorIM#     " colour
+" set statusline+=%R                        " readonly flag
+" set statusline+=%#Cursor#               " colour
+" set statusline+=%#CursorLine#     " colour
+" set statusline+=%=                          " right align
+" set statusline+=%#CursorLine#   " colour
+" set statusline+=\ %Y\                   " file type
+" set statusline+=%#CursorIM#     " colour
+" set statusline+=\ %3l:%-2c\         " line + column
+" set statusline+=%#Cursor#       " colour
 
 "" Global Variables
 let g:python3_host_prog = $PYTHON
@@ -119,39 +124,6 @@ nnoremap <Tab> :
 vnoremap <Tab> :
 
 "" Colemak Navigation
-nnoremap n j
-nnoremap N J
-nnoremap e k
-nnoremap E K
-nnoremap i l
-nnoremap I L
-
-nnoremap l i
-nnoremap L I
-nnoremap j e
-nnoremap J E
-nnoremap k n
-nnoremap K N
-
-vnoremap n j
-vnoremap N J
-vnoremap e k
-vnoremap E K
-
-vnoremap j e
-vnoremap J E
-vnoremap k n
-vnoremap K N
-
-nnoremap <C-w>h <C-w>h
-nnoremap <C-w>n <C-w>j
-nnoremap <C-w>e <C-w>k
-nnoremap <C-w>i <C-w>l
-nnoremap <C-w>H <C-w>H
-nnoremap <C-w>N <C-w>J
-nnoremap <C-w>E <C-w>K
-nnoremap <C-w>I <C-w>L
-
 "" Quick Window Switching
 nnoremap <A-n> <C-w>j
 nnoremap <A-h> <C-w>h
@@ -165,7 +137,6 @@ nnoremap <A-l> :set hls!<CR>
 nnoremap <A-s> :set spell!<CR>
 
 "" Misc
-nnoremap <C-n> <C-i>
 nnoremap _ :split<CR>
 nnoremap - :vsplit<CR>
 
@@ -181,15 +152,15 @@ nnoremap <C-q>e :cprevious<CR>
 
 """ Leader Key Maps
 "" Search
-nnoremap <Leader>s :%s//g<left><Left>
-vnoremap <Leader>s :s//g<left><Left>
+" nnoremap <Leader>s :%s//g<left><Left>
+" nnoremap <Leader>s :s//g<left><Left>
 nnoremap <Leader>S :'{,'}s//g<left><Left>
+nnoremap <Leader>r :Rg -i ""<Left>
+nnoremap <Leader>R :Rg<Space>
 
 "" Buffer Controls
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>W :w!<CR>
-nnoremap <Leader>r :Rg -i ""<Left>
-nnoremap <Leader>R :Rg<Space>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>Q :q!<CR>
 
@@ -275,6 +246,7 @@ nnoremap <Leader>z :call AngularVsplitMatchDefault("n")<CR>
 nnoremap <Leader>kc :Config<CR>
 nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
 nnoremap <Leader>kr :Reload<CR>
+nnoremap <Leader>km :SearchMap<Space>
 nnoremap <Leader>kp :CtrlPClearCache<CR>
 
 "" MISC
@@ -290,7 +262,17 @@ nnoremap <Leader>. @:
 " inoremap <C-s> <C-r>"
 " snoremap <C-s> <C-r>"
 
-"" CoC
+"" Completion
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing message extra message when using completion
+set shortmess+=c
+"map <c-p> to manually trigger completion
+imap <silent> <c-p> <Plug>(completion_trigger)
 " nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 " nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 " inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
@@ -310,9 +292,6 @@ nnoremap <Leader>y :TerminalTabToggle<CR>
 
 
 """ Command Mode
-cnoremap <C-n> <Down>
-cnoremap <C-e> <Up>
-cnoremap <C-s> <C-r>"
 
 
 """" Abbreviations
@@ -395,7 +374,7 @@ let g:user_emmet_leader_key="<c-y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
-  autocmd BufWritePost *.vim,*.vimrc,C:/Users/wb549004/.config/nvim/*.lua Reload
+  autocmd BufWritePost *.vim,*.vimrc,~/.config/nvim/*.lua Reload
 augroup END
 
 augroup HTML
@@ -416,6 +395,7 @@ augroup END
 
 augroup MISC
   autocmd!
+  " autocmd BufEnter * lua require'completion'.on_attach()
   autocmd FileType qf nnoremap <buffer> <Enter> <C-W><Enter><C-W>T
   autocmd User ProjectChanged if g:NERDTree.IsOpen() | NERDTreeCWD | endif
   autocmd User ProjectChanged CtrlPClearCache
