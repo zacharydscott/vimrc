@@ -2,7 +2,7 @@ require'lspconfig'.tsserver.setup{  on_attach = function(client)
         client.resolved_capabilities.document_formatting = false
         on_attach(client)
     end}
-
+vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
 -- Setup general LSP
 local nvim_lsp = require('lspconfig')
 
@@ -75,7 +75,7 @@ require'compe'.setup {
 
 local opts = { noremap=true, silent=true, expr=true }
 vim.api.nvim_set_keymap('i', '<c-Space>', 'compe#complete()',opts)
-vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm(\'<cr>\')',{expr=true,silent= false,noremap=true})
+vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm(\'<cr>\')',opts)
 vim.api.nvim_set_keymap('i', '<c-t>', 'compe#close()',opts)
 -- vim.api.nvim_set_keymap('i', '<c-e>', '<C-p>',opts)
 vim.api.nvim_set_keymap('i', '<c-f>', 'compe#scroll({\'delta\': +4})',opts)

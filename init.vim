@@ -6,6 +6,7 @@
 "        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
 "         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
 "
+" gjursnzxm,.
 """" Plugins
 call plug#begin('~/.vim/plugged')
 " Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': '.install.sh'}
@@ -13,13 +14,13 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 Plug 'tpope/vim-fugitive'
 " Plug 'kien/ctrlp.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
-Plug 'sharkdp/fd'
 Plug 'jremmen/vim-ripgrep'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'Xuyuap/nerdtree-git-plugin'
@@ -28,12 +29,17 @@ Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mattn/emmet-vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
+" Plug 'garbas/vim-snipmate'
+" Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'hrsh7th/nvim-compe'
 Plug 'neovim/nvim-lspconfig'
+Plug 'zacharydscott/nvim-treeline'
+Plug 'jiangmiao/auto-pairs'
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+" Plug 'SirVer/ultisnips'
 call plug#end()
+luafile ~/.vim/plugged/nvim-treeline/plugin/treeline.lua
 
 """" External Files
 " source ./custom-text.vim
@@ -64,22 +70,24 @@ let mapleader= " "
 au VimEnter * GuiPopupmenu 0
 
 "" Status Line
-set statusline=
-set statusline+=\ %n\           " buffer number
-set statusline+=\ %M\                       " modified [+] flag
-set statusline+=%f\ -\ %y\ %{FugitiveHead()} 
-set statusline+=%{&paste?'\ PASTE\ ':''}
-set statusline+=%{&spell?'\ SPELL\ ':''}
-set statusline+=%#CursorIM#     " colour
-set statusline+=%R                        " readonly flag
-set statusline+=%#Cursor#               " colour
-set statusline+=%#CursorLine#     " colour
-set statusline+=%=                          " right align
-set statusline+=%#CursorLine#   " colour
-set statusline+=\ %Y\                   " file type
-set statusline+=%#CursorIM#     " colour
-set statusline+=\ %3l:%-2c\         " line + column
-set statusline+=%#Cursor#       " colour
+" set statusline=
+" set statusline+=%t          " buffer number
+
+hi link TreelineMethod TSMethod
+hi link TreelineFunction TSFunction
+hi link TreelineClass TSConstBuiltin
+
+set statusline=%!luaeval('require([[nvim-treeline]]).get_status(nil)')    " color
+" set statusline+=\ %y                       " modified [+] flag
+" " set statusline+=%f\ -\ %y\ %{FugitiveHead()} 
+" " set statusline+=%{&paste?'\ PASTE\ ':''}
+" " set statusline+=%{&spell?'\ SPELL\ ':''}
+" " " set statusline+=%#CursorIM#     " colour
+" set statusline+=%=                          " right align
+" set statusline+=%#CursorLine#   " colour
+" set statusline+=\ %Y\                   " file type
+" set statusline+=\ %3l:%-2c\         " line + column
+" set statusline+=%#Cursor#       " colour
 
 "" Global Variables
 let g:python3_host_prog = $PYTHON
@@ -90,7 +98,9 @@ let g:terminal_config =[{'load_command': 'npm run local', 'push_command': 'npm r
 colorscheme gruvbox
 hi Normal guibg=NONE ctermbg=NONE
 
+
 """" Mappings
+
 """ General
 "" Custom Text Objects
 onoremap in( :<c-u>silent! normal! f(vi(
@@ -158,6 +168,11 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-e> <C-w>k
 nnoremap <A-i> <C-w>l
 
+nnoremap <Leader>n <C-w>j
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>e <C-w>k
+nnoremap <Leader>i <C-w>l
+
 "" Alt Keys
 nnoremap <A-o> o<esc>
 nnoremap <A-O> O<esc>
@@ -175,8 +190,8 @@ nnoremap <bslash>p :ProjectMenu<CR>
 "" Quickfix
 nnoremap <C-q>o :bot copen<CR>
 nnoremap <C-q>i :bot cclose<CR>
-nnoremap <C-q>n :cnext<CR>
-nnoremap <C-q>e :cprevious<CR>
+nnoremap <C-t> :cnext<CR>
+nnoremap <C-s> :cprevious<CR>
 
 
 """ Leader Key Maps
@@ -194,7 +209,8 @@ nnoremap <Leader>q :q<CR>
 nnoremap <Leader>Q :q!<CR>
 
 "" Tab
-" nnoremap <Leader>v :tabnew<CR>
+nnoremap <Leader>v :tabnew<CR>
+nnoremap <Leader>V :tabnew<CR>:Telescope<CR>
 " nnoremap <Leader>t gt
 " nnoremap <Leader>T gT
 " let g:ctrlp_map = '<Leader>p'
@@ -235,7 +251,7 @@ nnoremap <Leader>gi :diffget //3<CR>
 " nmap <silent> gr <Plug>(coc-references)
 
 "" NERD Tree
-nnoremap <Leader>nf :NERDTreeFind<CR>
+" nnoremap <Leader>nf :NERDTreeFind<CR>
 nnoremap <Leader>o :NERDTreeToggle<CR>
 nnoremap <Leader>or :NERDTreeFind<CR>
 
@@ -379,7 +395,7 @@ let g:coc_global_extensions = [
 
 function! s:check_back_space() abort
   let col = col('.') -1
-  return !col || getline('.')[col - 1]=~# '\s'
+  return !col || getline('.')[col - 1]=~# '_'
 endfunction
 
 """ snipmate
@@ -401,6 +417,7 @@ augroup END
 augroup HTML
   autocmd!
   autocmd FileType html onoremap aa :normal F<Space>v2f"<CR>
+  autocmd FileType html setlocal iskeyword+=-
   autocmd FileType html onoremap ia :normal T<Space>f"ivf"h<CR>
 augroup END
 
