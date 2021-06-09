@@ -5,6 +5,9 @@ luafile $XDG_CONFIG_HOME/nvim/lua/telescopic.lua
 luafile $XDG_CONFIG_HOME/nvim/lua/lsp.lua
 luafile $XDG_CONFIG_HOME/nvim/lua/mappings.lua
 luafile $XDG_CONFIG_HOME/nvim/lua/treeline.lua
+luafile $XDG_CONFIG_HOME/nvim/lua/git.lua
+luafile $XDG_CONFIG_HOME/nvim/lua/nerd-tree.lua
+luafile $XDG_CONFIG_HOME/nvim/lua/settings.lua
 
 function! LuaFolds(lnum)
   let s:thisline = getline(a:lnum)
