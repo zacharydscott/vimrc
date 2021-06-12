@@ -7,9 +7,10 @@
 "         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
 "
 """" Plugins
+"lua vim.g.nvim_tree_follow = 1
 call plug#begin('~/.vim/plugged')
 " Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': '.install.sh'}
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -24,23 +25,29 @@ Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'sharkdp/fd'
 Plug 'jremmen/vim-ripgrep'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'Xuyuap/nerdtree-git-plugin'
+" Plug 'Xuyuap/nerdtree-git-plugin'
 Plug 'morhetz/gruvbox'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mattn/emmet-vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
+" Plug 'garbas/vim-snipmate'
+" Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'hrsh7th/nvim-compe'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'nvim-lua/completion-nvim'
 Plug 'neovim/nvim-lspconfig'
 call plug#end()
 
+ 
 """" External Files
 " source ./custom-text.vim
 so $XDG_CONFIG_HOME/nvim/lua/config.vim
+lua require('config')
 "
 "
 "" Settings
@@ -50,9 +57,9 @@ set number relativenumber
 set nocompatible
 set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
 set noswapfile
-if has('GuiPopupmenu')
+augroup GuiPopupmenu
   au VimEnter * GuiPopupmenu 0
-endif
+augroup end
 
 "" Style
 colorscheme gruvbox
@@ -105,15 +112,9 @@ let &t_SR = "\<esc>[5 q"
 let &t_EI = "\<esc>[2 q"
 
 """" plugin configuration
-""" nerd tree
-
-augroup nerd_tree
-  autocmd!
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:nerdtree") && b:nerdtree.istabtree()) | q | endif
-augroup end
 
 """ Emmet
-let g:user_emmet_leader_key="<c-y>"
+let g:user_emmet_leader_key="<C-Y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
@@ -140,7 +141,6 @@ augroup MISC
   autocmd!
   " autocmd BufEnter * lua require'completion'.on_attach()
   autocmd FileType qf nnoremap <buffer> <Enter> <C-W><Enter><C-W>T
-  autocmd User ProjectChanged if g:NERDTree.IsOpen() | NERDTreeCWD | endif
   autocmd User ProjectChanged CtrlPClearCache
   autocmd User ProjectChanged if filereadable("./.vimrc") | execute ":so .vimrc" | endif
   autocmd TermOpen * nnoremap <buffer> - :vsplit<cr>:term<cr> | 

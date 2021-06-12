@@ -79,13 +79,13 @@ nsk('n','<Leader>R',':Rg<Space>',loudopts)
 
 
 --- Misc.
-nsk('n','<C-n>','<C-i>',opts)
-nsk('n','<Tab>',':',loudopts)
+nsk('n','<Backspace>',':',loudopts)
 nsk('n','<Leader>a','ggVG',opts)
 nsk('n','<Leader>.','@:',opts)
--- nsk('n','<Leader>km','ciw',opts)
+nsk('n','<Leader>d',':Explore<CR>',opts)
 
 ---- Insert Mappings
+nsk('i','<c-e>','<c-p>',opts)
 
 ---- Command Mappings
 nsk('c','<C-n>','<Down>',opts)

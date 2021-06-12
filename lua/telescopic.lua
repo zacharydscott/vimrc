@@ -93,6 +93,8 @@ vim.api.nvim_set_keymap('n','<leader>tt',':lua require(\'telescope.builtin\').fi
 vim.api.nvim_set_keymap('n','<leader>tb',':lua require(\'telescope.builtin\').buffers()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tg',':lua require(\'telescope.builtin\').git_branches()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tr',':lua require(\'telescope.builtin\').live_grep()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>tb',':lua require(\'telescope.builtin\').current_buffer_fuzzy_find()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader>to',':lua require(\'telescope.builtin\').buffers()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tv',':lua require(\'telescopic\').search_vim_config()<cr>', opts)
 
 return M
