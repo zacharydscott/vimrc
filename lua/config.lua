@@ -5,9 +5,9 @@ nsk = vim.api.nvim_set_keymap
 set = vim.api.nvim_set_option
 require('treesitter')
 require('telescopic')
-require('lsp')
 require('mappings')
 require('treeline')
 require('git')
 require('nvim-tree-config')
 require('settings')
+require('lsp')

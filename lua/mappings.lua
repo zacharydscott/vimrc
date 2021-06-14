@@ -85,12 +85,14 @@ nsk('n','<Leader>.','@:',opts)
 nsk('n','<Leader>d',':Explore<CR>',opts)
 
 ---- Insert Mappings
-nsk('i','<c-e>','<c-p>',opts)
+nsk('i','<c-s>','<c-r>"',opts)
 
 ---- Command Mappings
-nsk('c','<C-n>','<Down>',opts)
-nsk('c','<C-e>','<Up>',opts)
-nsk('c','<C-s>','<C-r>"',opts)
+nsk('c','<C-n>','<Down>',loudopts)
+nsk('c','<C-e>','<Up>',loudopts)
+nsk('c','<C-h>','<Left>',loudopts)
+nsk('c','<C-o>','<Right>',loudopts)
+nsk('c','<C-s>','<C-r>"',loudopts)
 
 ---- Custom Commands
 api.nvim_exec('command! -nargs=1 SearchMap lua require("map-search").better_map_buffer("<args>","")',true)

@@ -34,8 +34,10 @@ Plug 'tomtom/tlib_vim'
 " Plug 'garbas/vim-snipmate'
 " Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
+" Plug 'jiangmiao/auto-pairs'
+" Plug 'hrsh7th/vim-vsnip'
+" Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'SirVer/ultisnips'
 Plug 'hrsh7th/nvim-compe'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
@@ -57,9 +59,12 @@ set number relativenumber
 set nocompatible
 set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
 set noswapfile
-augroup GuiPopupmenu
-  au VimEnter * GuiPopupmenu 0
-augroup end
+" augroup GuiPopupmenu
+  " au VimEnter * GuiPopupmenu 0
+" augroup end
+let g:UltiSnipsExpandTrigger="<C-t>"
+let g:UltiSnipsJumpForwardTrigger="<Tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 
 "" Style
 colorscheme gruvbox
@@ -96,10 +101,6 @@ nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
 nnoremap <Leader>kr :Reload<CR>
 nnoremap <Leader>km :SearchMap<Space>
 nnoremap <Leader>kp :CtrlPClearCache<CR>
-
-"" Completion
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noinsert,noselect

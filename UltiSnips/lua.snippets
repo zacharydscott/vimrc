@@ -1,0 +1,73 @@
+## function defs
+
+snippet func "Local Lua function"
+local function $1($2)
+  $3
+end
+endsnippet
+
+snippet munc "Module level lua function"
+local function M:$1($2)
+  $3
+end
+endsnippet
+
+snippet gunc "Global lua function"
+function $1($2)
+  $3
+end
+endsnippet
+
+## for loops
+
+snippet fori "For loop in 'array'"
+for ${1:i},${2:v} in ipairs($3) do
+  $4
+end
+endsnippet
+
+snippet for "For loop over 'map'"
+for ${1:i},${2:v} in pairs($3) do
+  $4
+end
+endsnippet
+
+## If conditions
+
+snippet if "simple if condition"
+if $1 then
+  $2
+end
+endsnippet
+
+snippet ife "if/else block"
+if $1 then
+  $2
+else
+  $3
+end
+endsnippet
+
+snippet elif "if/elseif block"
+if $1 then
+  $2
+elseif $3 then
+  $4
+end
+endsnippet
+
+snippet elc "additional elseif conditino"
+elseif $1 then
+  $2
+endsnippet
+
+## Utilities
+snippet module "Create boilerplate for module" 
+${1:imports}
+
+local M = {}
+
+$2
+
+return M
+endsnippet
