@@ -1,0 +1,150 @@
+## utilities
+snippet debug "Creates a debug line with conditional check"
+if (${1:true}) debugger
+endsnippet
+
+snippet todo "Create a todo item"
+// TODO: ${1:what todo} - Zachary Scott - `!v strftime("%c")`
+endsnippet
+
+snippet cl "create a consolelog with default of yanked text"
+console.log(${1:`!v @"`});
+endsnippet
+
+snippet func "function definitioin"
+function $1($2): ${3:any} {
+	$4
+}
+endsnippet
+
+snippet for "simple for loop"
+for (const ${1:i} = 0; $1 < ${2:10}; i++) {
+	$3
+}
+endsnippet
+
+snippet foro "loop over array"
+for (const ${1:i} of $2) {
+	$3
+}
+endsnippet
+
+snippet fori "loop over object"
+for (const ${1:i} in $2) {
+	${3:const obj = $2[$1]}
+}
+endsnippet
+
+## Angular
+
+snippet ng-module "Create a new Angular Module"
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@NgModule({
+	imports: [CommonModule$2],
+	declarations: [$3],
+	exports: [$3]
+	})
+export class ${1:ModuleName}Module {}
+endsnippet
+
+snippet ng-component
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+	selector: '${2:selector}',
+	templateUrl: '${3:name}.component.html'
+})
+export class ${1:ComponentName}Component implements OnInit {
+	constructor() { }
+
+	ngOnInit() { }
+${4}
+}
+endsnippet
+
+## TPT
+
+snippet tpt-data-service "Create a new data service"
+import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
+import { CallInfo, DataManager, StatefulData } from '@spi/shared';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+
+const ${2:const name}: string = '$3';
+
+@Injectable()
+export class $1DataService extends BaseFormDataService {
+	constructor(dataManager: DataManager, protected globalService: GlobalService) {
+		super(dataManager, globalService, $2);
+	}
+
+	public get$1Data() {
+		const { projectId, formId } = this.getRouteParams();
+		const postBody = {
+			input: JSON.stringify({projectId, formId})
+	}
+		const callInfo: CallInfo = new CallInfo(environment.END_POINTS.API_URL + $2, 'post', postBody);
+		return this.getData(this.getStoreKey(), callInfo, this.processGetDetails.bind(this), [projectId, formId]);
+	}
+
+	public saveData() {
+		const { projectId, formId } = this.getRouteParams();
+		const statefulData: StatefulData = this.dataManager.getSync(this.getStoreKey());
+
+		if (statefulData.state !== 'dirty' || statefulData.isMatching) {
+			this.revertData()
+		}
+		const postBody = this.processDataToUpdate(statefulData.currentData, projectId, formId);
+		const callInfo: CallInfo = new CallInfo(environment.END_POINTS.API_URL + url, 'post', postBody);
+	}
+
+	private getStoreKey() { return $2 }
+
+	private processGetDetails(respData: any) {
+		
+	}
+
+	private processDataToUpdate(data: any, projectId: string, formId: string) {
+		
+	}
+}
+endsnippet
+
+snippet tpt-view-logic "Spi Form Logic Boilerplate"
+import { Injectable } from '@angular/core';
+import { DataManager, StatefulData } from '@spi/shared';
+import { BasePageFormLogic } from 'projects/portal/src/app/utils/base-page-form-logic';
+import { GlobalService } from 'projects/portal/src/app/utils/global.service';
+import { filter, tap } from 'rxjs/operators';
+
+@Injectable()
+export class ${1:FormName}Logic extends BasePageFormLogic {
+
+	constructor(
+			globalService: GlobalService,
+			dataManager: DataManager
+		) {
+			super(dataManager, globalService);
+		}
+	
+	public onInit() {
+		const controls = this.formGroup.flatControls;
+		this.initialize({
+		
+		});
+		this.sink.add(
+			// add basic data pipeline
+		);
+	}
+}
+endsnippet
+
+## TPT Utils
+snippet tpt-data-test "Create test data for service"
+return of(
+	new StatefulData('synced',$1,$1)
+);
+endsnippet

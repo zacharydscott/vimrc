@@ -1,0 +1,94 @@
+# SPI
+snippet spi-form "Basic Spi Form"
+{
+	"label": "$1",
+	"level": "page",
+	"sections": {
+		"${2/(\w*)\s(\w)/\l$1-\l$2/g}": {
+			"label": "$2",
+			"subLabel": "$3",
+			"level": "section",
+			"controls": {
+				"${4/(\w*)\s(\w)/\l$1-\l$2/g}": {
+					"label": "$4",
+					"type": "$5",
+					"readonly": false,
+					"editable": ${6:true}
+				}
+			}
+		}
+	}
+}
+endsnippet
+
+snippet spi-tab "Create a tab section"
+"${1/(\w*)\s(\w)/\l$1-\l$2/g}": {
+	"separation": "tab",
+	"level": "section",
+	"label": "${1:Tab Name}",
+	"controls": {
+		"${2/(\w*)\s(\w)/\l$1-\l$2/g}": {
+			"label": "${2:Sub-Section}",
+			"tabRoute": "${2/(\w*)\s(\w)/\l$1-\l$2/g}",
+			"level": "sub-section",
+			"controls": {
+				"${3/(\w*)\s(\w)/\l$1-\l$2/g}": {
+					"label": "${3:First Control}",
+					"type": "$4",
+					"readonly": false,
+					"editable": ${5:false}
+					}
+			}
+		}
+	}
+}
+endsnippet
+
+snippet spi-section "Generic Spi Section"
+"${1/(\w*)\s(\w)/\l$1-\l$2/g}": {
+	"label": "${1:Section}",
+	"tabRoute": "${1/(\w*)\s(\w)/\l$1-\l$2/g}",
+	"controls": {
+		"${2/(\w*)\s(\w)/\l$1-\l$2/g}": {
+			"label": "${2:First Control}",
+			"type": "$3",
+			"readonly": false,
+			"editable": ${4:false}
+			}
+	}
+}
+endsnippet
+
+snippet spi-simpletable "Simple Table Configuration"
+"${1/(\w*)\s(\w)/\l$1-\l$2/g}": {
+	"type": "simpletable",
+	"label": "$1",
+	"columns": [
+		{
+			"control": "${2:text}",
+			"columnkey": "${3/(\w*)\s(\w)/\l$1\u$2/g}",
+			"label": "${3:label}",
+			"config": {
+				"placeholder": "",
+				"readonly": true
+			}
+		}
+	],
+	"showDeleteButton": ${3:false},
+	"width": "100",
+	"showNoDataText": true,
+	"text": "No data found"
+}
+endsnippet
+
+snippet spi-tablecol "Timple Tablee Column"
+{
+	"control": "${1:text}",
+	"columnkey": "${3}",
+	"label": "${2:label}",
+	"config": {
+		"placeholder": "",
+		"readonly": true
+	}
+}
+endsnippet

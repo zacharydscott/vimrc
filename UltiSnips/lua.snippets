@@ -7,7 +7,7 @@ end
 endsnippet
 
 snippet munc "Module level lua function"
-local function M:$1($2)
+function M:$1($2)
   $3
 end
 endsnippet
@@ -21,7 +21,7 @@ endsnippet
 ## for loops
 
 snippet fori "For loop in 'array'"
-for ${1:i},${2:v} in ipairs($3) do
+for ${1:n},${2:v} in ipairs($3) do
   $4
 end
 endsnippet

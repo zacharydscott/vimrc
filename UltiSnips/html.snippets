@@ -1,0 +1,56 @@
+### Angular snippets
+
+#n create a new element in existing tag
+snippet ngFor "create an ngFor loop"
+*ngFor="let ${1:item} of ${2:list}"
+endsnippet
+
+snippet ngIf
+*ngIf="${1:expression}"
+endsnippet
+
+snippet ngModel
+[(ngModel)]="${1:binding}"
+endsnippet
+
+snippet routerLink
+[routerLink]="['${1:routeName}']"
+endsnippet
+
+snippet ngStyle
+[ngStyle]="{
+	${1:style}: ${2:expression}
+}"
+endsnippet
+
+snippet ngSwitch
+<div [ngSwitch]="${1:conditionExpression}">
+	<div *ngSwitchWhen="${2:expression}">${3:output}</div>
+	<div *ngSwitchDefault>${4:output2}</div>
+</div>
+endsnippet
+
+## Create a new tag with attribute
+
+snippet tagFor "New tag with ngFor"
+<${1:div} *ngFor="let ${2:item} of ${3:expression}">
+</$1>
+endsnippet
+
+snippet tagIf "new tag with ngIf directive"
+<${1:div} *ngIf="${2:expression}"></$1>
+endsnippet
+
+snippet tagModel "new tag with ngModal directive" 
+<${1:div} [(ngModal)]="${2:expression}"></$1>
+endsnippet
+ 
+##
+
+snippet a "Add an attribute"
+$1="$2"
+endsnippet
+
+snippet na "Add an attribute"
+[$1]="$2"
+endsnippet

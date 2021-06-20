@@ -6,18 +6,24 @@
 "        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
 "         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
 "
+au BufWinLeave <buffer> lua require('float-term'):handle_term_close()
+let s:python3_host_prog = expand('$USERPROFILE\venv\neovim3\Scripts\python.exe')
+if filereadable(fnameescape(s:python3_host_prog))
+  let g:python3_host_prog = fnameescape(s:python3_host_prog)
+else
+  unlet! g:python3_host_prog
+endif
+" let g:python3_host_prog="C://Users//wb549004//AppData//Local//Microsoft//WindowsApps//PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0/python3.9.exe"
 """" Plugins
 "lua vim.g.nvim_tree_follow = 1
 call plug#begin('~/.vim/plugged')
-" Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': '.install.sh'}
-" Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground',
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
 " Plug 'nvim-treeline',
 Plug 'tpope/vim-fugitive'
-" Plug 'kien/ctrlp.vim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -25,24 +31,18 @@ Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'sharkdp/fd'
 Plug 'jremmen/vim-ripgrep'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-" Plug 'Xuyuap/nerdtree-git-plugin'
-Plug 'morhetz/gruvbox'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mattn/emmet-vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-" Plug 'garbas/vim-snipmate'
-" Plug 'honza/vim-snippets'
 Plug 'nvim-lua/plenary.nvim'
-" Plug 'jiangmiao/auto-pairs'
-" Plug 'hrsh7th/vim-vsnip'
-" Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'SirVer/ultisnips'
 Plug 'hrsh7th/nvim-compe'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
-" Plug 'nvim-lua/completion-nvim'
 Plug 'neovim/nvim-lspconfig'
+Plug 'zacharydscott/float-term.nvim'
+" Plug 'ObserverOfTime/coloresque.vim'
 call plug#end()
 
  
@@ -54,21 +54,41 @@ lua require('config')
 "
 "" Settings
 """ Basics
+let g:nvcode_termcolors=256
+let USER_NAME = 'Zachary Scott'
+hi link FloatTermDefaultTab Normal
+hi link FloatTermSelectTab Cursor
+" hi link FloatTermDefaultTab Normal |hi link FloatTermSelectTab Cursor
+syntax on
+colorscheme gruvbox " Or whatever colorscheme you make
+cnoreabbrev h vert bo h
+
+" checks if your terminal has 24-bit color support
+" if (has("termguicolors"))
+"     set termguicolors
+"     hi LineNr ctermbg=NONE guibg=NONE
+" endif
 set wildignore+=node_modules/**
+set number
 set number relativenumber
 set nocompatible
 set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
 set noswapfile
-" augroup GuiPopupmenu
-  " au VimEnter * GuiPopupmenu 0
-" augroup end
+augroup GuiPopupmenu
+  au VimEnter * GuiPopupmenu 0
+augroup end
 let g:UltiSnipsExpandTrigger="<C-t>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
+let json_count = 0
 
+augroup FLOAT_TERMINAL
+  au TermClose * let a = 'b'
+augroup END
 "" Style
-colorscheme gruvbox
-hi Normal guibg=NONE ctermbg=NONE
+" colorscheme gruvbox
+" hi Normal guibg=NONE ctermbg=NONE
+
 
 "" Angular Splits
 nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
@@ -119,7 +139,7 @@ let g:user_emmet_leader_key="<C-Y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
-  autocmd BufWritePost *.vim,*.vimrc,~/.config/nvim/*.lua Reload
+  autocmd BufWritePost *.lua :luafile %
 augroup END
 
 augroup HTML
@@ -137,6 +157,13 @@ augroup MD
   autocmd FileType md onoremap ii :normal DD?\*<CR><Right><Right>v/\*<CR>
 augroup END
 
+set cursorline
+hi cursorline cterm=none term=none
+augroup CURSOR_LINE
+autocmd WinEnter * setlocal cursorline
+autocmd WinLeave * setlocal nocursorline
+augroup END
+highlight CursorLine guibg=#333333 ctermbg=234
 
 augroup MISC
   autocmd!
@@ -144,11 +171,11 @@ augroup MISC
   autocmd FileType qf nnoremap <buffer> <Enter> <C-W><Enter><C-W>T
   autocmd User ProjectChanged CtrlPClearCache
   autocmd User ProjectChanged if filereadable("./.vimrc") | execute ":so .vimrc" | endif
-  autocmd TermOpen * nnoremap <buffer> - :vsplit<cr>:term<cr> | 
-        \ nnoremap <Leader>q :bw!<cr> | 
-        \ nnoremap <C-c> i<C-c> | 
-        \ inoremap <A-n> <C-\><C-n>
-augroup END
+  " autocmd TermOpen * nnoremap <buffer> - :vsplit<cr>:term<cr> | 
+  "       \ nnoremap <Leader>q :bw!<cr> | 
+  "       \ nnoremap <C-c> i<C-c> | 
+  "       \ inoremap <A-n> <C-\><C-n>
+" augroup END
 
 """" Functions
 """ Angular Split
@@ -180,3 +207,6 @@ endfunction
 function! GitCommit(message)
   execute "Git commit -m \"".a:message."\""
 endfunction
+
+hi link FloatTermDefaultTab Normal
+hi link FloatTermSelectTab Cursor
