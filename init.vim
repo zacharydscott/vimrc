@@ -1,212 +1,277 @@
-"      __  __   ______             ____     ____
-"     /\ \/\ \ /\__  _\   /'\_/`\ /\  _`\  /\  _`\
-"     \ \ \ \ \\/_/\ \/  /\      \\ \ \L\ \\ \ \/\_\
-"      \ \ \ \ \  \ \ \  \ \ \__\ \\ \ ,  / \ \ \/_/_
-"       \ \ \_/ \  \_\ \__\ \ \_/\ \\ \ \\ \ \ \ \L\ \
-"        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
-"         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
-"
-au BufWinLeave <buffer> lua require('float-term'):handle_term_close()
-let s:python3_host_prog = expand('$USERPROFILE\venv\neovim3\Scripts\python.exe')
-if filereadable(fnameescape(s:python3_host_prog))
-  let g:python3_host_prog = fnameescape(s:python3_host_prog)
-else
-  unlet! g:python3_host_prog
-endif
-" let g:python3_host_prog="C://Users//wb549004//AppData//Local//Microsoft//WindowsApps//PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0/python3.9.exe"
-"""" Plugins
-"lua vim.g.nvim_tree_follow = 1
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" This is a "comfy IDE" config. Obviously I have
+" a bias toward typescript, so this coc-vim
+" is pefrect for getting that sweet-sweet 
+" vscode functionality. Actually, I find
+" coc to be even more powerful.
+"""""""""""""""""""""""""""""""""""""""""""""""""
+
+
 call plug#begin('~/.vim/plugged')
+Plug 'mattn/emmet-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/playground',
-Plug 'christianchiarulli/nvcode-color-schemes.vim'
-" Plug 'nvim-treeline',
-Plug 'tpope/vim-fugitive'
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzy-native.nvim'
-Plug 'sharkdp/fd'
-Plug 'jremmen/vim-ripgrep'
+Plug 'morhetz/gruvbox'
+"Plug 'lervag/vimtex'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'stefandtw/quickfix-reflector.vim'
-Plug 'mattn/emmet-vim'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'SirVer/ultisnips'
-Plug 'hrsh7th/nvim-compe'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'neovim/nvim-lspconfig'
-Plug 'zacharydscott/float-term.nvim'
-" Plug 'ObserverOfTime/coloresque.vim'
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
+Plug 'HerringtonDarkholme/yats.vim'
 call plug#end()
 
+nnoremap n j
+nnoremap e k
+nnoremap i l
+nnoremap j e
+nnoremap k n
+nnoremap l i
+
+nnoremap N J
+nnoremap E K
+nnoremap I L
+nnoremap J E
+nnoremap K N
+nnoremap L I
+nnoremap ' /
+nnoremap \ '
+
+vnoremap n j
+vnoremap e k
+vnoremap i l
+vnoremap j e
+vnoremap k n
+vnoremap l i
+
+vnoremap N J
+vnoremap E K
+vnoremap I L
+vnoremap J E
+vnoremap K N
+vnoremap L I
+vnoremap ' /
+vnoremap \ '
+
+"" hotkey configurations
+map <Space> <Leader>
+
+" disable arrow key
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+" change window navigation
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nnoremap > >>
+nnoremap < <<
+
+" tab navigation
+nnoremap <Leader>j gt
+nnoremap <Leader>k gT
+
+" emmet shortcut
+nnoremap <Leader>g, <C-Y>,
+
+" reload nvim
+nnoremap <Leader>r :Reload<CR>
+
+"" NERD Tree
+" focus nerd tree
+nnoremap <Leader>nf :NERDTreeFind<CR>
+
+map <C-n> :NERDTreeToggle<CR> 
  
-"""" External Files
-" source ./custom-text.vim
-so $XDG_CONFIG_HOME/nvim/lua/config.vim
-lua require('config')
-"
-"
-"" Settings
-""" Basics
-let g:nvcode_termcolors=256
-let USER_NAME = 'Zachary Scott'
-hi link FloatTermDefaultTab Normal
-hi link FloatTermSelectTab Cursor
-" hi link FloatTermDefaultTab Normal |hi link FloatTermSelectTab Cursor
-syntax on
-colorscheme gruvbox " Or whatever colorscheme you make
-cnoreabbrev h vert bo h
+""lets
+" silver searcher integration with fzf
+let g:ackprg = 'ag --nogroup --nocolor --column'
 
-" checks if your terminal has 24-bit color support
-" if (has("termguicolors"))
-"     set termguicolors
-"     hi LineNr ctermbg=NONE guibg=NONE
-" endif
-set wildignore+=node_modules/**
-set number
-set number relativenumber
+"" commands
+"reload init.vim
+command! Reload execute ":so ~/.config/nvim/init.vim"
+
+"" theme
+colorscheme gruvbox
+hi Normal guibg=NONE ctermbg=NONE
+
+"" ctrl-p
+let g:ctrlp_custom_igrnoe = 'node_modules\|git'
+
+" set nerdtree settings
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
+" basic settings
 set nocompatible
-set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
-set noswapfile
-augroup GuiPopupmenu
-  au VimEnter * GuiPopupmenu 0
-augroup end
-let g:UltiSnipsExpandTrigger="<C-t>"
-let g:UltiSnipsJumpForwardTrigger="<Tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
-let json_count = 0
 
-augroup FLOAT_TERMINAL
-  au TermClose * let a = 'b'
-augroup END
-"" Style
-" colorscheme gruvbox
-" hi Normal guibg=NONE ctermbg=NONE
+"" COC settings
+let g:coc_global_extensions = [
+	\ 'coc-snippets',
+	\ 'coc-pairs',
+	\ 'coc-tsserver',
+	\ 'coc-eslint',
+	\ 'coc-json',
+	\ 'coc-angular',
+	\]
 
-
-"" Angular Splits
-nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
-nnoremap <Leader>xt :call AngularVsplitMatch("ts","v")<CR>
-nnoremap <Leader>xd :call AngularVsplitMatch("spec.ts","v")<CR>
-nnoremap <Leader>xs :call AngularVsplitMatch("scss","v")<CR>
-nnoremap <Leader>xc :call AngularVsplitMatch("css","v")<CR>
-nnoremap <Leader>xx :call AngularVsplitMatchDefault("v")<CR>
-nnoremap <Leader>x :call AngularVsplitMatchDefault("v")<CR>
-
-nnoremap <Leader>XH :call AngularVsplitMatch("html","h")<CR>
-nnoremap <Leader>XT :call AngularVsplitMatch("ts","h")<CR>
-nnoremap <Leader>XD :call AngularVsplitMatch("spec.ts","h")<CR>
-nnoremap <Leader>XS :call AngularVsplitMatch("scss","h")<CR>
-nnoremap <Leader>XC :call AngularVsplitMatch("css","h")<CR>
-nnoremap <Leader>XX :call AngularVsplitMatchDefault("h")<CR>
-nnoremap <Leader>X :call AngularVsplitMatchDefault("h")<CR>
-
-nnoremap <Leader>zh :call AngularVsplitMatch("html","n")<CR>
-nnoremap <Leader>zt :call AngularVsplitMatch("ts","n")<CR>
-nnoremap <Leader>zd :call AngularVsplitMatch("spec.ts","n")<CR>
-nnoremap <Leader>zs :call AngularVsplitMatch("scss","n")<CR>
-nnoremap <Leader>zc :call AngularVsplitMatch("css","n")<CR>
-nnoremap <Leader>zz :call AngularVsplitMatchDefault("n")<CR>
-nnoremap <Leader>z :call AngularVsplitMatchDefault("n")<CR>
-
-"" Meta Shortcuts
-nnoremap <Leader>kc :Config<CR>
-nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
-nnoremap <Leader>kr :Reload<CR>
-nnoremap <Leader>km :SearchMap<Space>
-nnoremap <Leader>kp :CtrlPClearCache<CR>
-
-" Set completeopt to have a better completion experience
-set completeopt=menuone,noinsert,noselect
-
-" Avoid showing message extra message when using completion
+"" suggested by COC for server compatibility
+"set hidden
+"set nobackup
+"set nowritebackup
+set cmdheight=2
+set updatetime=300
+"
+"" don't give |ins-completion-menu| messages.
 set shortmess+=c
 
+"" for gutters
+"set signcolumn=yes
+"
+"" map tab for autocompletion
+inoremap <silent><expr> <TAB> 
+	\ pumvisible() ? "\<C-n>" :
+	\ <SID>check_back_space() ? "\<TAB>" :
+	\ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" to be frank I'm not sure...
+function! s:check_back_space() abort
+	let col = col('.') -1
+	return !col || getline('.')[col - 1]=~# '\s'
+endfunction
+
+inoremap <silent><expr> <c-space> coc#refresh()
+
+""just copy/pasted
+"" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+"" position. Coc only does snippet and additional edit on confirm.
+"if has('patch8.1.1068')
+"  " Use `complete_info` if your (Neo)Vim version supports it.
+"  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>
+"else
+"  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>
+"endif
+"
+"" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> <Leader>E <Plug>(coc-diagnostic-prev)
+nmap <silent> <Leader>e <Plug>(coc-diagnostic-next)
+"
+"" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+"
+"" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+"
+"function! s:show_documentation()
+"  if (index(['vim','help'], &filetype) >= 0)
+"    execute 'h '.expand('<cword>')
+"  else
+"    call CocAction('doHover')
+"  endif
+"endfunction
+"
+"" Highlight the symbol and its references when holding the cursor.
+"autocmd CursorHold * silent call CocActionAsync('highlight')
+"
+"" Symbol renaming.
+nmap <F2>  <Plug>(coc-rename)
+"
+"" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>ff  <Plug>(coc-format)
+nmap <leader>ff  <Plug>(coc-format)
+"
+"augroup mygroup
+"  autocmd!
+"  " Setup formatexpr specified filetype(s).
+"  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+"  " Update signature help on jump placeholder.
+"  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+"augroup end
+"
+"" Applying codeAction to the selected region.
+"" Example: `<leader>aap` for current paragraph
+"xmap <leader>a  <Plug>(coc-codeaction-selected)
+"nmap <leader>a  <Plug>(coc-codeaction-selected)
+"
+"" Remap keys for applying codeAction to the current line.
+"nmap <leader>ac  <Plug>(coc-codeaction)
+"" Apply AutoFix to problem on the current line.
+"nmap <leader>qf  <Plug>(coc-fix-current)
+"
+"" Introduce function text object
+"" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+"
+"" Use <TAB> for selections ranges.
+"" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+"" coc-tsserver, coc-python are the examples of servers that support it.
+"nmap <silent> <TAB> <Plug>(coc-range-select)
+"xmap <silent> <TAB> <Plug>(coc-range-select)
+"
+"" Add `:Format` command to format current buffer.
+"command! -nargs=0 Format :call CocAction('format')
+"
+"" Add `:Fold` command to fold current buffer.
+"command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+"
+"" Add `:OR` command for organize imports of the current buffer.
+"command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+"
+"" Add (Neo)Vim's native statusline support.
+"" NOTE: Please see `:h coc-status` for integrations with external plugins that
+"" provide custom statusline: lightline.vim, vim-airline.
+"set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+"
+"" Mappings using CoCList:
+"" Show all diagnostics.
+"nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+"" Manage extensions.
+"nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+"" Show commands.
+"nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+"" Find symbol of current document.
+"nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+"" Search workspace symbols.
+"nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+"" Do default action for next item.
+"nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+"" Do default action for previous item.
+"nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+"" Resume latest coc list.
+"nnoremap <silent> <space>p  :<C-u>CocListResume<CR>d
+"
+
+"" control p set wildignore+=*/.git/*,*/node_modules/*,*/.svn/*,*/.idea/*,*/.DS_Store,*/vendor
+
+"" latex settings
+autocmd BufWritePost *.tex :execute "! pdflatex" expand("%:t") 
+"let g:livepreview_previewer = 'zathura'
+	
 let &t_SI = "\<esc>[5 q"
 let &t_SR = "\<esc>[5 q"
 let &t_EI = "\<esc>[2 q"
 
-"""" plugin configuration
-
-""" Emmet
-let g:user_emmet_leader_key="<C-Y>"
-"""" File Auto Commands
-augroup VIM
-  autocmd!
-  autocmd BufWritePost *.lua :luafile %
-augroup END
-
-augroup HTML
-  autocmd!
-  autocmd FileType html onoremap aa :normal F<Space>v2f"<CR>
-  autocmd FileType html onoremap ia :normal T<Space>f"ivf"h<CR>
-augroup END
-
-augroup MD
-  autocmd!
-  autocmd FileType md onoremap ab :normal ?\*\*<CR>v/\*\*<CR><Right><Right>
-  autocmd FileType md onoremap ib :normal ?\*\*<CR><Right><Right>v/\*\*<CR>
-  autocmd FileType md onoremap ai :normal F*vf*<CR>
-  autocmd FileType md xnoremap ai :normal F*vf*<CR>
-  autocmd FileType md onoremap ii :normal DD?\*<CR><Right><Right>v/\*<CR>
-augroup END
-
-set cursorline
-hi cursorline cterm=none term=none
-augroup CURSOR_LINE
-autocmd WinEnter * setlocal cursorline
-autocmd WinLeave * setlocal nocursorline
-augroup END
-highlight CursorLine guibg=#333333 ctermbg=234
-
-augroup MISC
-  autocmd!
-  " autocmd BufEnter * lua require'completion'.on_attach()
-  autocmd FileType qf nnoremap <buffer> <Enter> <C-W><Enter><C-W>T
-  autocmd User ProjectChanged CtrlPClearCache
-  autocmd User ProjectChanged if filereadable("./.vimrc") | execute ":so .vimrc" | endif
-  " autocmd TermOpen * nnoremap <buffer> - :vsplit<cr>:term<cr> | 
-  "       \ nnoremap <Leader>q :bw!<cr> | 
-  "       \ nnoremap <C-c> i<C-c> | 
-  "       \ inoremap <A-n> <C-\><C-n>
-" augroup END
-
-"""" Functions
-""" Angular Split
-function! AngularVsplitMatch(targ, direction)
-  let path = substitute(expand("%"),"\.[A-z]*$",".".a:targ,"")
-  if (a:direction =~ "v")
-    execute "vsplit ".path
-  elseif (a:direction =~ "h")
-    execute "split ".path
-  else
-    execute "e ".path
-  endif
-endfunction
-
-function! AngularVsplitMatchDefault(direction)
-  if (match(expand("%"),"\.html$") =~ -1)
-    call AngularVsplitMatch("html", a:direction)
-  else
-    call AngularVsplitMatch("ts", a:direction)
-  endif
-endfunction
-
-""" Git Shortcuts
-function! GitAddAndCheck()
-  Git add .
-  Git diff --cached
-endfunction
-
-function! GitCommit(message)
-  execute "Git commit -m \"".a:message."\""
-endfunction
-
-hi link FloatTermDefaultTab Normal
-hi link FloatTermSelectTab Cursor
+set clipboard=unnamedplus
+set t_Co=256
+set number relativenumber
+set tabstop=4
+set shiftwidth=4
+set encoding=UTF-8
