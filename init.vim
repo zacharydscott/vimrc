@@ -6,7 +6,8 @@
 "        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
 "         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
 "
-au BufWinLeave <buffer> lua require('float-term'):handle_term_close()
+
+" au BufWinLeave <buffer> lua require('float-term'):handle_term_close()
 let s:python3_host_prog = expand('$USERPROFILE\venv\neovim3\Scripts\python.exe')
 if filereadable(fnameescape(s:python3_host_prog))
   let g:python3_host_prog = fnameescape(s:python3_host_prog)
@@ -32,6 +33,7 @@ Plug 'sharkdp/fd'
 Plug 'jremmen/vim-ripgrep'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'stefandtw/quickfix-reflector.vim'
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install}}
 Plug 'mattn/emmet-vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -68,6 +70,7 @@ cnoreabbrev h vert bo h
 "     set termguicolors
 "     hi LineNr ctermbg=NONE guibg=NONE
 " endif
+set autoindent noexpandtab tabstop=4 shiftwidth=4
 set wildignore+=node_modules/**
 set number
 set number relativenumber
@@ -88,7 +91,6 @@ augroup END
 "" Style
 " colorscheme gruvbox
 " hi Normal guibg=NONE ctermbg=NONE
-
 
 "" Angular Splits
 nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
@@ -116,11 +118,11 @@ nnoremap <Leader>zz :call AngularVsplitMatchDefault("n")<CR>
 nnoremap <Leader>z :call AngularVsplitMatchDefault("n")<CR>
 
 "" Meta Shortcuts
-nnoremap <Leader>kc :Config<CR>
-nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
-nnoremap <Leader>kr :Reload<CR>
-nnoremap <Leader>km :SearchMap<Space>
-nnoremap <Leader>kp :CtrlPClearCache<CR>
+" nnoremap <Leader>kc :Config<CR>
+" nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
+" nnoremap <Leader>kr :Reload<CR>
+" nnoremap <Leader>km :SearchMap<Space>
+" nnoremap <Leader>kp :CtrlPClearCache<CR>
 
 " Set completeopt to have a better completion experience
 set completeopt=menuone,noinsert,noselect
@@ -164,6 +166,7 @@ autocmd WinEnter * setlocal cursorline
 autocmd WinLeave * setlocal nocursorline
 augroup END
 highlight CursorLine guibg=#333333 ctermbg=234
+highlight Cursor guibg=#333333 ctermbg=234
 
 augroup MISC
   autocmd!
@@ -210,3 +213,5 @@ endfunction
 
 hi link FloatTermDefaultTab Normal
 hi link FloatTermSelectTab Cursor
+hi link FloatBorder NONE
+hi Search guibg=#FAE060

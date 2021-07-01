@@ -88,7 +88,7 @@ end
 
 
 --- Mappings
-vim.api.nvim_set_keymap('n','<leader>p',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader><leader>',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tt',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tb',':lua require(\'telescope.builtin\').buffers()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tg',':lua require(\'telescope.builtin\').git_branches()<cr>', opts)
