@@ -21,8 +21,8 @@ require('telescope').setup{
       n = {
         ["n"] = actions.move_selection_next,
         ["e"] = actions.move_selection_previous,
-        ["<C-n>"] = actions.move_selection_next,
-        ["<C-e>"] = actions.move_selection_previous
+        ["<C-p>"] = actions.move_selection_next,
+        ["<C-n>"] = actions.move_selection_previous
       }
     },
     prompt_position = "bottom",
@@ -88,8 +88,8 @@ end
 
 
 --- Mappings
-vim.api.nvim_set_keymap('n','<leader><leader>',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
-vim.api.nvim_set_keymap('n','<leader>tt',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
+-- vim.api.nvim_set_keymap('n','<leader><leader>',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
+vim.api.nvim_set_keymap('n','<leader><Leader>',':lua require(\'telescope.builtin\').find_files()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tb',':lua require(\'telescope.builtin\').buffers()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tg',':lua require(\'telescope.builtin\').git_branches()<cr>', opts)
 vim.api.nvim_set_keymap('n','<leader>tr',':lua require(\'telescope.builtin\').live_grep()<cr>', opts)

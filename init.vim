@@ -33,7 +33,7 @@ Plug 'sharkdp/fd'
 Plug 'jremmen/vim-ripgrep'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'stefandtw/quickfix-reflector.vim'
-" Plug 'junegunn/fzf', { 'do': { -> fzf#install}}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install}}
 Plug 'mattn/emmet-vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -44,6 +44,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'neovim/nvim-lspconfig'
 Plug 'zacharydscott/float-term.nvim'
+Plug 'kristijanhusak/orgmode.nvim'
+Plug 'zacharydscott/hatchet.nvim'
+" Plug 'tmsvg/pear-tree'
 " Plug 'ObserverOfTime/coloresque.vim'
 call plug#end()
 
@@ -75,8 +78,24 @@ set wildignore+=node_modules/**
 set number
 set number relativenumber
 set nocompatible
-set list listchars=tab:\>\ ,trail:*,extends:>,precedes:<
+set list listchars=tab:\ \ \|,trail:*,extends:>,precedes:<
 set noswapfile
+set wrap
+let g:nvcode_termcolors=256
+
+" set statusline= %t
+
+set statusline=\ %#CursorColumn#%{FugitiveHead()}\%#Normal#\ %t\ %m\ %=\ %y\ %l:%c\ 
+
+syntax on
+colorscheme nvcode " Or whatever colorscheme you make
+
+
+" checks if your terminal has 24-bit color support
+if (has("termguicolors"))
+    set termguicolors
+    hi LineNr ctermbg=NONE guibg=NONE
+endif
 augroup GuiPopupmenu
   au VimEnter * GuiPopupmenu 0
 augroup end
@@ -117,6 +136,85 @@ nnoremap <Leader>zc :call AngularVsplitMatch("css","n")<CR>
 nnoremap <Leader>zz :call AngularVsplitMatchDefault("n")<CR>
 nnoremap <Leader>z :call AngularVsplitMatchDefault("n")<CR>
 
+onoremap ia i(
+onoremap aa a(
+onoremap ir i{
+onoremap ar a{
+onoremap iz i<
+onoremap az a<
+onoremap ix i[
+onoremap ax a[
+
+vnoremap lja :<c-u>call NextPair('(',')','i',0)<cr>
+onoremap lja :<c-u>call NextPair('(',')','i',1)<cr>
+vnoremap aja :<c-u>call nextPair('(',')','a',0)<cr>
+onoremap aja :<c-u>call NextPair('(',')','a',1)<cr>
+
+vnoremap ljr :<c-u>call NextPair('{','}','i',0)<cr>
+onoremap ljr :<c-u>call NextPair('{','}','i',1)<cr>
+vnoremap ajr :<c-u>call NextPair('{','}','a',0)<cr>
+onoremap ajr :<c-u>call NextPair('{','}','a',1)<cr>
+
+vnoremap ljx :<c-u>call NextPair('[',']','i',0)<cr>
+onoremap ljx :<c-u>call NextPair('[',']','i',1)<cr>
+vnoremap ajx :<c-u>call NextPair('[',']','a',0)<cr>
+onoremap ajx :<c-u>call NextPair('[',']','a',1)<cr>
+
+vnoremap ljz :<c-u>call NextPair('<','>','i',0)<cr>
+onoremap ljz :<c-u>call NextPair('<','>','i',1)<cr>
+vnoremap ajz :<c-u>call NextPair('<','>','a',0)<cr>
+onoremap ajz :<c-u>call NextPair('<','>','a',1)<cr>
+
+vnoremap lia :<c-u>call LastPair('(',')','i',0)<cr>
+onoremap lia :<c-u>call LastPair('(',')','i',1)<cr>
+vnoremap aia :<c-u>call LastPair('(',')','a',0)<cr>
+onoremap aia :<c-u>call LastPair('(',')','a',1)<cr>
+
+vnoremap lir :<c-u>call LastPair('{','}','i',0)<cr>
+onoremap lir :<c-u>call LastPair('{','}','i',1)<cr>
+vnoremap air :<c-u>call LastPair('{','}','a',0)<cr>
+onoremap air :<c-u>call LastPair('{','}','a',1)<cr>
+
+vnoremap lix :<c-u>call LastPair('[',']','i',0)<cr>
+onoremap lix :<c-u>call LastPair('[',']','i',1)<cr>
+vnoremap aix :<c-u>call LastPair('[',']','a',0)<cr>
+onoremap aix :<c-u>call LastPair('[',']','a',1)<cr>
+
+vnoremap liz :<c-u>call LastPair('<','>','i',0)<cr>
+onoremap liz :<c-u>call LastPair('<','>','i',1)<cr>
+vnoremap aiz :<c-u>call LastPair('<','>','a',0)<cr>
+onoremap aiz :<c-u>call LastPair('<','>','a',1)<cr>
+
+nnoremap <Leader>/ :set opfunc=SearchObject<cr>g@
+
+function! SearchObject(a)
+	let save = @"
+	normal! `[v`]y
+	let @/ = @"
+	let @" = save
+endfunction
+
+function! NextPair(ch1,ch2,in,omap)
+	let l:search = @/
+	execute "normal! /".a:ch1.""
+	let @/ = l:search
+	if a:omap && matchstr(getline('.'), '\%'.(col('.')+1).'c.') == a:ch2
+		normal! a<space><esc>
+	endif
+	execute "normal! v".a:in.a:ch1
+endfunction
+
+function LastPair(ch1,ch2,in,omap)
+	let l:search = @/
+	execute "normal! ?".a:ch1.""
+	let @/ = l:search
+	if a:omap && matchstr(getline('.'), '\%'.(col('.')-1).'c.') == a:ch1
+		normal! i<space><esc>
+		return
+	endif
+	execute "normal! v".a:in.a:ch1
+endfunction
+
 "" Meta Shortcuts
 " nnoremap <Leader>kc :Config<CR>
 " nnoremap <Leader>ks :SnipMateOpenSnippetFiles<CR>
@@ -141,13 +239,15 @@ let g:user_emmet_leader_key="<C-Y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
-  autocmd BufWritePost *.lua :luafile %
+  " autocmd BufWritePost *.lua :luafile %
 augroup END
 
 augroup HTML
   autocmd!
   autocmd FileType html onoremap aa :normal F<Space>v2f"<CR>
+  autocmd FileType html vnoremap aa :normal F<Space>v2f"<CR>
   autocmd FileType html onoremap ia :normal T<Space>f"ivf"h<CR>
+  autocmd FileType html vnoremap ia :normal T<Space>f"ivf"h<CR>
 augroup END
 
 augroup MD
@@ -214,4 +314,4 @@ endfunction
 hi link FloatTermDefaultTab Normal
 hi link FloatTermSelectTab Cursor
 hi link FloatBorder NONE
-hi Search guibg=#FAE060
+" hi Search guibg=#FAE060

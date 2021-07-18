@@ -6,6 +6,8 @@ local function term_attach()
     nnoremap <buffer> <c-w> <C-\><C-n>:FloatTermAdd 
     nnoremap <buffer> <c-a> <C-\><C-n>:FloatTermAdd<CR>
     nnoremap <buffer> <c-q> <C-\><C-n>:FloatTermemove<CR>
+    nnoremap <buffer> u <c-u>
+    nnoremap <buffer> d <c-d>
   ]],true)
 end
 

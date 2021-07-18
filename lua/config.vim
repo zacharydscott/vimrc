@@ -10,5 +10,7 @@ luafile $XDG_CONFIG_HOME/nvim/lua/git.lua
 luafile $XDG_CONFIG_HOME/nvim/lua/nvim-tree-config.lua
 luafile $XDG_CONFIG_HOME/nvim/lua/settings.lua
 luafile $XDG_CONFIG_HOME/nvim/lua/term-float-config.lua
+luafile $XDG_CONFIG_HOME/nvim/lua/hatchet-config.lua
+luafile $XDG_CONFIG_HOME/nvim/lua/color.lua
 " endif
 " let is_loaded_full = 1

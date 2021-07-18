@@ -71,3 +71,18 @@ $2
 
 return M
 endsnippet
+
+snippet ptab "Print Table"
+for i,v in pairs($1) do
+		print(i,v)
+end
+endsnippet
+
+## Vim Config
+snippet map "Create a new mapping"
+nsk('${1:n}','$2','$3',${4:opts})
+endsnippet
+
+snippet map-com "Create a new command mapping"
+nsk('${1:n}','$2',':$3<CR>',${4:opts})
+endsnippet
