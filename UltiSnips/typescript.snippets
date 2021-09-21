@@ -7,7 +7,7 @@ snippet todo "Create a todo item"
 // TODO: ${1:what todo} - Zachary Scott - `!v strftime("%c")`
 endsnippet
 
-snippet setInterval "Set an Interval"
+snippet seti "Set an Interval"
 setInterval(_ => {
 		$1
 }, ${2:2000})
@@ -20,6 +20,12 @@ endsnippet
 snippet func "function definitioin"
 function $1($2): ${3:any} {
 	$4
+}
+endsnippet
+
+snippet meth "method definitioin"
+${1:public} $2($3): ${4:any} {
+	$5
 }
 endsnippet
 
@@ -39,6 +45,21 @@ snippet fori "loop over object"
 for (const ${1:i} in $2) {
 	${3:const obj = $2[$1]}
 }
+endsnippet
+
+## Switch Statement
+snippet switch "Switch statement"
+switch ($1) {
+	case ${2:first condition}:
+	break;
+	default:
+}
+endsnippet
+
+snippet swcs "Switch Case - String case"
+case '$1':
+		$2;
+break;
 endsnippet
 
 ## Array
@@ -75,6 +96,18 @@ export class ${1:ComponentName}Component implements OnInit {
 
 	ngOnInit() { }
 ${4}
+}
+endsnippet
+
+snippet ngResolver "Angular Resolver"
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+
+@Injectable()
+export class ${1:Example}Resolver implements Resolve<any> {
+
+		public resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+		}
 }
 endsnippet
 

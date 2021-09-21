@@ -20,6 +20,6 @@ local function cursor_path()
 	return path, path_str
 end
 
-nsk('n','<leader>bj',':lua require"hatchet-config".cursor_path() print(path_str)<cr>',opts)
+nsk('n','<leader>bk',':lua require"hatchet-config".cursor_path() print(path_str)<cr>',opts)
 
 return { cursor_path = cursor_path }

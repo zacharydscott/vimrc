@@ -65,7 +65,7 @@ hi link FloatTermDefaultTab Normal
 hi link FloatTermSelectTab Cursor
 " hi link FloatTermDefaultTab Normal |hi link FloatTermSelectTab Cursor
 syntax on
-colorscheme gruvbox " Or whatever colorscheme you make
+colorscheme gruvbox
 cnoreabbrev h vert bo h
 
 " checks if your terminal has 24-bit color support
@@ -93,11 +93,11 @@ colorscheme nvcode " Or whatever colorscheme you make
 
 " checks if your terminal has 24-bit color support
 if (has("termguicolors"))
-    set termguicolors
-    hi LineNr ctermbg=NONE guibg=NONE
+	set termguicolors
+	hi LineNr ctermbg=NONE guibg=NONE
 endif
 augroup GuiPopupmenu
-  au VimEnter * GuiPopupmenu 0
+	au VimEnter * GuiPopupmenu 0
 augroup end
 let g:UltiSnipsExpandTrigger="<C-t>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
@@ -105,13 +105,61 @@ let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 let json_count = 0
 
 augroup FLOAT_TERMINAL
-  au TermClose * let a = 'b'
+	au TermClose * let a = 'b'
 augroup END
 "" Style
 " colorscheme gruvbox
 " hi Normal guibg=NONE ctermbg=NONE
 
 "" Angular Splits
+nnoremap n j
+nnoremap e k
+nnoremap i l
+
+nnoremap N J
+nnoremap E K
+nnoremap I L
+
+nnoremap j e
+nnoremap k n
+nnoremap l i
+
+nnoremap J E
+nnoremap K N
+nnoremap L I
+
+vnoremap n j
+vnoremap e k
+" vnoremap i l
+
+vnoremap N J
+vnoremap E K
+" vnoremap I L
+
+vnoremap j e
+vnoremap k n
+" vnoremap l i
+
+vnoremap J E
+vnoremap K N
+" vnoremap L I
+
+nnoremap gn gj
+nnoremap ge gk
+nnoremap gi gl
+
+nnoremap gN gJ
+nnoremap gE gK
+nnoremap gI gL
+
+nnoremap gj ge
+nnoremap gk gn
+nnoremap gl gi
+
+nnoremap gJ gE
+nnoremap gK gN
+nnoremap gL gI
+
 nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
 nnoremap <Leader>xt :call AngularVsplitMatch("ts","v")<CR>
 nnoremap <Leader>xd :call AngularVsplitMatch("spec.ts","v")<CR>
@@ -279,6 +327,23 @@ augroup MISC
   "       \ nnoremap <C-c> i<C-c> | 
   "       \ inoremap <A-n> <C-\><C-n>
 " augroup END
+function! True_False_Toggle()
+	let l:old=@"
+	let l:pos = getpos('.')
+	normal! yiw
+	let @" = get({'false': 'true', 'true': 'false', 'False': 'True', 'True': 'False'}, @", 'fail')
+	if @" ==# 'fail'
+		normal! 
+		let @"=l:old
+		return
+	endif
+	normal! viwp
+	let @"=l:old
+	call setpos('.',l:pos)
+	return
+endfunction
+
+nnoremap <c-a> :call True_False_Toggle()<CR>
 
 """" Functions
 """ Angular Split
@@ -310,6 +375,10 @@ endfunction
 function! GitCommit(message)
   execute "Git commit -m \"".a:message."\""
 endfunction
+
+nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 hi link FloatTermDefaultTab Normal
 hi link FloatTermSelectTab Cursor

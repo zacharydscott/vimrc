@@ -1,0 +1,44 @@
+n  <Space>,s   *@:lua require'nvim-treesitter.incremental_selection'.init_selection()<CR>
+n  <Space>p      <Plug>(Prettier)
+n  <Space>/    * :set opfunc=SearchObject<CR>g@
+n  <Space>z    * :call AngularVsplitMatchDefault("n")<CR>
+n  <Space>zz   * :call AngularVsplitMatchDefault("n")<CR>
+n  <Space>zc   * :call AngularVsplitMatch("css","n")<CR>
+n  <Space>zs   * :call AngularVsplitMatch("scss","n")<CR>
+n  <Space>zd   * :call AngularVsplitMatch("spec.ts","n")<CR>
+n  <Space>zt   * :call AngularVsplitMatch("ts","n")<CR>
+n  <Space>zh   * :call AngularVsplitMatch("html","n")<CR>
+n  <Space>X    * :call AngularVsplitMatchDefault("h")<CR>
+n  <Space>XX   * :call AngularVsplitMatchDefault("h")<CR>
+n  <Space>XC   * :call AngularVsplitMatch("css","h")<CR>
+n  <Space>XS   * :call AngularVsplitMatch("scss","h")<CR>
+n  <Space>XD   * :call AngularVsplitMatch("spec.ts","h")<CR>
+n  <Space>XT   * :call AngularVsplitMatch("ts","h")<CR>
+n  <Space>XH   * :call AngularVsplitMatch("html","h")<CR>
+n  <Space>x    * :call AngularVsplitMatchDefault("v")<CR>
+n  <Space>xx   * :call AngularVsplitMatchDefault("v")<CR>
+n  <Space>xc   * :call AngularVsplitMatch("css","v")<CR>
+n  <Space>xs   * :call AngularVsplitMatch("scss","v")<CR>
+n  <Space>xd   * :call AngularVsplitMatch("spec.ts","v")<CR>
+n  <Space>xt   * :call AngularVsplitMatch("ts","v")<CR>
+n  <Space>xh   * :call AngularVsplitMatch("html","v")<CR>
+n  <Space><S-Tab> * :NvimTreeFindFile<CR>
+n  <Space><Tab> * :NvimTreeToggle<CR>
+n  <Space>gi   * :diffget //3<CR>
+n  <Space>gh   * :diffget //2<CR>
+n  <Space>ge   * :G merge<Space>
+n  <Space>go   * :G checkout<Space>
+n  <Space>gc   * :FloatTermSwitchOrAdd Git<CR>git commit -m "<Left>"
+n  <Space>gm   * :Magit<CR>
+n  <Space>gb   * :G blame<CR>
+n  <Space>gF   * :Git fetch --all<CR>
+n  <Space>gf   * :Git fetch<CR>
+n  <Space>ga   * :FloatTermSwitchOrAdd Git<CR>git status<CR>
+n  <Space>gu   * :Git push<CR>
+n  <Space>gP   * :FloatTermSwitchOrAdd Git<CR>git pull --all<CR>
+n  <Space>gp   * :Git pull<CR>
+n  <Space>gs   * :call GitAddAndCheck()<CR>
+n  <Space>gg   * :G<CR>
+n  <Space>gt   * :G<Space>
+n  <Space>nd   * :MoveConfig <CR>
+
