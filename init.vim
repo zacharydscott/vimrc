@@ -6,11 +6,12 @@
 "        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
 "         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
 "
-
 " au BufWinLeave <buffer> lua require('float-term'):handle_term_close()
 let s:python3_host_prog = expand('$USERPROFILE\venv\neovim3\Scripts\python.exe')
 if filereadable(fnameescape(s:python3_host_prog))
   let g:python3_host_prog = fnameescape(s:python3_host_prog)
+elseif filereadable(fnameescape('bin/python3.10'))
+  let g:python3_host_prog = fnameescape('bin/python3.10')
 else
   unlet! g:python3_host_prog
 endif
@@ -96,9 +97,9 @@ if (has("termguicolors"))
 	set termguicolors
 	hi LineNr ctermbg=NONE guibg=NONE
 endif
-augroup GuiPopupmenu
-	au VimEnter * GuiPopupmenu 0
-augroup end
+" augroup GuiPopupmenu
+" 	au VimEnter * GuiPopupmenu 0
+" augroup end
 let g:UltiSnipsExpandTrigger="<C-t>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
@@ -287,6 +288,7 @@ let g:user_emmet_leader_key="<C-Y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
+  autocmd BufWritePost *.tex execute(':! pdflatex '..@%)
   " autocmd BufWritePost *.lua :luafile %
 augroup END
 

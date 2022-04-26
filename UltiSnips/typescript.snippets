@@ -3,6 +3,23 @@ snippet debug "Creates a debug line with conditional check"
 if (${1:true}) debugger
 endsnippet
 
+snippet getset "Create a getter/setter pair"
+private _$1: $2;
+get $1(): $2 {
+	return this._$1;
+}
+set $1(v: $2) {
+	this._$1 = v;
+}
+endsnippet
+
+snippet getter "Create a getter"
+private _$1: $2;
+get $1(): $2 {
+	return this._$1;
+}
+endsnippet
+
 snippet todo "Create a todo item"
 // TODO: ${1:what todo} - Zachary Scott - `!v strftime("%c")`
 endsnippet
