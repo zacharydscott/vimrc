@@ -24,6 +24,7 @@ require('treeline')
 require('git')
 require('nvim-tree-config')
 require('settings')
+require('nvim-autopairs').setup{map_cr= false}
 require('lsp')
 require('color')
 require('hatchet-config')

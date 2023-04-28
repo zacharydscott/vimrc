@@ -1,3 +1,13 @@
+### Temp
+## AJS Migration
+snippet up-provider "Upgrade Provider for AJS migration"
+	{
+		provide: $1,
+		useFactory: ajsFactory('$2'),
+		deps: [AJS_INJECTOR],
+	},
+endsnippet
+
 ## utilities
 snippet debug "Creates a debug line with conditional check"
 if (${1:true}) debugger
@@ -21,7 +31,7 @@ get $1(): $2 {
 endsnippet
 
 snippet todo "Create a todo item"
-// TODO: ${1:what todo} - Zachary Scott - `!v strftime("%c")`
+// TODO AJS Phase 2: ${1:what todo} - Zachary Scott - `!v strftime("%c")`
 endsnippet
 
 snippet seti "Set an Interval"
@@ -88,6 +98,14 @@ forEach(($1:${2:any}) => {
 endsnippet
 
 ## Angular
+
+snippet inp "Add an Input"
+@Input() $1: ${2:any};
+endsnippet
+
+snippet out "Add an Input"
+@Output() $1 = new EventEmitter<{2:any}>();
+endsnippet
 
 snippet ng-module "Create a new Angular Module"
 import { NgModule } from '@angular/core';

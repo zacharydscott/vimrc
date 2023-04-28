@@ -42,22 +42,38 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'SirVer/ultisnips'
 Plug 'hrsh7th/nvim-compe'
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'kyazdani42/nvim-tree.lua'
 Plug 'neovim/nvim-lspconfig'
 Plug 'zacharydscott/float-term.nvim'
 Plug 'kristijanhusak/orgmode.nvim'
 Plug 'zacharydscott/hatchet.nvim'
-" Plug 'tmsvg/pear-tree'
-" Plug 'ObserverOfTime/coloresque.vim'
+Plug 'APZelos/blamer.nvim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'windwp/nvim-autopairs'
+Plug 'github/copilot.vim'
 call plug#end()
 
- 
 """" External Files
 " source ./custom-text.vim
 so $XDG_CONFIG_HOME/nvim/lua/config.vim
 lua require('config')
-"
-"
+set clipboard=unnamed
+
+let s:clip = '/mnt/c/Windows/System32/clip.exe' 
+if executable(s:clip)
+	augroup WSLYank
+		autocmd!
+		autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents, "\<CR>")).' | '.s:clip)
+	augroup END
+end
+
+" map <silent> "=p :r !powershell.exe -Command Get-Clipboard<CR>
+" map! <silent> <C-r>= :r !powershell.exe -Command Get-Clipboard<CR>
+
+" noremap "+p :exe 'norm a'.system('/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -Command Get-Clipboard')<CR>
+
 "" Settings
 """ Basics
 let g:nvcode_termcolors=256
@@ -66,7 +82,6 @@ hi link FloatTermDefaultTab Normal
 hi link FloatTermSelectTab Cursor
 " hi link FloatTermDefaultTab Normal |hi link FloatTermSelectTab Cursor
 syntax on
-colorscheme gruvbox
 cnoreabbrev h vert bo h
 
 " checks if your terminal has 24-bit color support
@@ -77,7 +92,7 @@ cnoreabbrev h vert bo h
 set autoindent noexpandtab tabstop=4 shiftwidth=4
 set wildignore+=node_modules/**
 set number
-set number relativenumber
+" set number relativenumber
 set nocompatible
 set list listchars=tab:\ \ \|,trail:*,extends:>,precedes:<
 set noswapfile
@@ -86,10 +101,52 @@ let g:nvcode_termcolors=256
 
 " set statusline= %t
 
-set statusline=\ %#CursorColumn#%{FugitiveHead()}\%#Normal#\ %t\ %m\ %=\ %y\ %l:%c\ 
+" set statusline=\ %#CursorColumn#%{FugitiveHead()}\%#Normal#\ %t\ %m\ %=\ %y\ %l:%c\ 
+set laststatus=2
+let g:airline_powerline_fonts = 1
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+"" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+"" Nvim Treeline
+let g:nvim_tree_icons = {
+	\ 'default': "",
+	\ 'symlink': "詞",
+	\ 'folder': {
+	\   'default': "▶",
+	\   'open': "▼",
+	\   'empty': "▷",
+	\   'empty_open': "▽",
+	\   'symlink': "詞",
+	\   'symlink_open': "詞",
+	\   }
+	\ }
 
 syntax on
-colorscheme nvcode " Or whatever colorscheme you make
 
 
 " checks if your terminal has 24-bit color support
@@ -103,6 +160,7 @@ endif
 let g:UltiSnipsExpandTrigger="<C-t>"
 let g:UltiSnipsJumpForwardTrigger="<Tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
+let g:blamer_delay = 500
 let json_count = 0
 
 augroup FLOAT_TERMINAL
@@ -282,7 +340,6 @@ let &t_SR = "\<esc>[5 q"
 let &t_EI = "\<esc>[2 q"
 
 """" plugin configuration
-
 """ Emmet
 let g:user_emmet_leader_key="<C-Y>"
 """" File Auto Commands
@@ -290,6 +347,11 @@ augroup VIM
   autocmd!
   autocmd BufWritePost *.tex execute(':! pdflatex '..@%)
   " autocmd BufWritePost *.lua :luafile %
+augroup END
+
+augroup JS
+  autocmd!
+  autocmd BufWritePre *.ts :Prettier<CR>
 augroup END
 
 augroup HTML
@@ -315,8 +377,8 @@ augroup CURSOR_LINE
 autocmd WinEnter * setlocal cursorline
 autocmd WinLeave * setlocal nocursorline
 augroup END
-highlight CursorLine guibg=#333333 ctermbg=234
-highlight Cursor guibg=#333333 ctermbg=234
+highlight CursorLine guibg=#292929 ctermbg=234
+highlight Cursor guibg=#292929 ctermbg=234 guifg=#000000 ctermfg=Black
 
 augroup MISC
   autocmd!
@@ -329,6 +391,42 @@ augroup MISC
   "       \ nnoremap <C-c> i<C-c> | 
   "       \ inoremap <A-n> <C-\><C-n>
 " augroup END
+
+augroup ColorSchemeWatcher
+    autocmd!
+    autocmd ColorScheme * call MakeColorChanges()
+augroup END
+
+function! RemoveItalicFromHighlightCommand(somestring)
+    let cmd=a:somestring
+    " Samples:
+    " cterm=italic
+    " gui=bold,italic
+    " gui=bold,italic,underline
+    " gui=italic,bold,underline
+    " gui=
+    let cmd=substitute(cmd, "italic",    "", "g") " remove italics
+    let cmd=substitute(cmd, ",,",       ",", "g") " when italic occurs in middle of list, delete extraneous comma
+    let cmd=substitute(cmd, ", ",       " ", "g") " when italic at end of list, delete extraneous comma
+    let cmd=substitute(cmd, "gui\= ",   " ", "g") " when italic is only item in list, delete arg to avoid error
+    let cmd=substitute(cmd, "cterm\= ", " ", "g") " when italic is only item in list, delete arg to avoid error
+    let cmd=substitute(cmd, "term\= ",  " ", "g") " when italic is only item in list, delete arg to avoid error
+    return cmd
+endfunction
+
+function! MakeColorChanges()
+    redir @a | silent hi | redir END
+    let @a=substitute(@a, "xxx", "", "g") " The :hi command displays 'xxx' to show what the groups look like
+    let cmdlist = split(@a, "\n")
+    call filter(cmdlist, 'v:val =~ "italic"')
+    call map(cmdlist, 'RemoveItalicFromHighlightCommand(v:val)')
+    for cmd in cmdlist
+        let groupname=split(cmd, " ")[0]
+        execute "hi clear ".groupname
+        execute "hi default ".cmd
+    endfor
+endfunction
+
 function! True_False_Toggle()
 	let l:old=@"
 	let l:pos = getpos('.')
@@ -382,6 +480,7 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
+colorscheme gruvbox
 hi link FloatTermDefaultTab Normal
 hi link FloatTermSelectTab Cursor
 hi link FloatBorder NONE

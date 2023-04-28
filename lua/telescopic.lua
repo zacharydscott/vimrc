@@ -17,12 +17,14 @@ require('telescope').setup{
     mappings = {
       i = {
         ["<C-e>"] = actions.move_selection_previous,
+        ["<C-p>"] = actions.move_selection_next,
+        ["<C-n>"] = actions.move_selection_previous
       },
       n = {
         ["n"] = actions.move_selection_next,
         ["e"] = actions.move_selection_previous,
-        ["<C-p>"] = actions.move_selection_next,
-        ["<C-n>"] = actions.move_selection_previous
+        ["<C-n>"] = actions.move_selection_next,
+        ["<C-p>"] = actions.move_selection_previous
       }
     },
     prompt_position = "bottom",
@@ -47,6 +49,7 @@ require('telescope').setup{
     shorten_path = true,
     winblend = 0,
     width = 0.75,
+	height = 30,
     preview_cutoff = 120,
     results_height = 1,
     results_width = 0.8,

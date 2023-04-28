@@ -19,3 +19,6 @@ nsk('n','<Leader>gi',"0b/<<<<<CR>V/====<CR>d/>>>>><CR>dd",opts)
 nsk('n','<Leader>gh',"0bb/<<<<<CR>dd/=====<CR>V/>>>>><CR>d",opts)
 -- nsk('n','<Leader>gh',':diffget //2<CR>',opts)
 -- nsk('n','<Leader>gi',':diffget //3<CR>',opts)
+
+-- Blamer
+nsk('n','<A-b>',':BlamerToggle<CR>',opts)

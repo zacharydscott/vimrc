@@ -1,8 +1,20 @@
-vim.g.nvim_tree_disable_netrw = 0
-vim.g.nvim_tree_hijack_netrw = 0
 nsk('n','<Leader><Tab>',':NvimTreeToggle<CR>',opts)
 nsk('n','<Leader><S-Tab>',':NvimTreeFindFile<CR>',opts)
-require'nvim-tree'.setup {}
+require'nvim-tree'.setup {
+ sort_by = "case_sensitive",
+  renderer = {
+    group_empty = true,
+  },
+  view = {
+	  mappings	= {
+		  list = {
+			  {key = "e", action = ""}
+		  }
+	  }
+  },
+  filters = {
+    dotfiles = true,
+  },}
 -- local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 -- vim.g.nvim_tree_bindings = {
 	  -- ["N"]              = tree_cb("last_sibling"),
