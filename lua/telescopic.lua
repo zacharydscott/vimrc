@@ -54,7 +54,11 @@ require('telescope').setup{
     results_height = 1,
     results_width = 0.8,
     border = {},
-    borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+	borderchars = {
+		prompt = { "─", " ", " ", " ", "─", "─", " ", " " },
+		results = { " " },
+		preview = { " " },
+	},
     color_devicons = true,
     use_less = true,
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,

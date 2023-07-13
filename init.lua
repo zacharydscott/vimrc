@@ -1,12 +1,58 @@
-"      __  __   ______             ____     ____
-"     /\ \/\ \ /\__  _\   /'\_/`\ /\  _`\  /\  _`\
-"     \ \ \ \ \\/_/\ \/  /\      \\ \ \L\ \\ \ \/\_\
-"      \ \ \ \ \  \ \ \  \ \ \__\ \\ \ ,  / \ \ \/_/_
-"       \ \ \_/ \  \_\ \__\ \ \_/\ \\ \ \\ \ \ \ \L\ \
-"        \ `\___/  /\_____\\ \_\\ \_\\ \_\ \_\\ \____/
-"         `\/__/   \/_____/ \/_/ \/_/ \/_/\/ / \/___/
-"
-" au BufWinLeave <buffer> lua require('float-term'):handle_term_close()
+--   ___      ________       ___      _________          ___           ___  ___      ________
+--  |\  \    |\   ___  \    |\  \    |\___   ___\       |\  \         |\  \|\  \    |\   __  \
+--  \ \  \   \ \  \\ \  \   \ \  \   \|___ \  \_|       \ \  \        \ \  \\\  \   \ \  \|\  \
+--   \ \  \   \ \  \\ \  \   \ \  \       \ \  \         \ \  \        \ \  \\\  \   \ \   __  \
+--    \ \  \   \ \  \\ \  \   \ \  \       \ \  \    ___  \ \  \____    \ \  \\\  \   \ \  \ \  \
+--     \ \__\   \ \__\\ \__\   \ \__\       \ \__\  |\__\  \ \_______\   \ \_______\   \ \__\ \__\
+--      \|__|    \|__| \|__|    \|__|        \|__|   \|__|  \|_______|    \|_______|    \|__|\|__|
+
+vim.g.user_emmet_leader_key="<A-y>"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup({
+	"kyazdani42/nvim-web-devicons",
+	"vim-airline/vim-airline",
+	"vim-airline/vim-airline-themes",
+	"nvim-lua/plenary.nvim",
+	"nvim-lua/popup.nvim",
+	"tomtom/tlib_vim",
+	"nvim-treesitter/nvim-treesitter",
+	"nvim-treesitter/playground",
+	"nvim-treesitter/nvim-treesitter-textobjects",
+	"nvim-telescope/telescope.nvim",
+	"nvim-telescope/telescope-fzy-native.nvim",
+	"jremmen/vim-ripgrep",
+	"prettier/vim-prettier",
+	"mattn/emmet-vim",
+	"SirVer/ultisnips",
+	"neovim/nvim-lspconfig",
+	"kyazdani42/nvim-tree.lua",
+	"windwp/nvim-autopairs",
+	"github/copilot.vim",
+	"zacharydscott/float-term.nvim",
+	"zacharydscott/hatchet.nvim",
+	"tpope/vim-surround",
+	"tpope/vim-commentary",
+	"tpope/vim-fugitive",
+	"phaazon/hop.nvim",
+	"miversen33/netman.nvim",
+	"mfussenegger/nvim-dap",
+	"rcarriga/nvim-dap-ui",
+	"luisiacc/gruvbox-baby",
+	"mxsdev/nvim-dap-vscode-js",
+})
+
+vim.api.nvim_exec([[
 let s:python3_host_prog = expand('$USERPROFILE\venv\neovim3\Scripts\python.exe')
 if filereadable(fnameescape(s:python3_host_prog))
   let g:python3_host_prog = fnameescape(s:python3_host_prog)
@@ -15,50 +61,13 @@ elseif filereadable(fnameescape('bin/python3.10'))
 else
   unlet! g:python3_host_prog
 endif
-" let g:python3_host_prog="C://Users//wb549004//AppData//Local//Microsoft//WindowsApps//PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0/python3.9.exe"
-"""" Plugins
-"lua vim.g.nvim_tree_follow = 1
-call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/playground',
-Plug 'christianchiarulli/nvcode-color-schemes.vim'
-" Plug 'nvim-treeline',
-Plug 'tpope/vim-fugitive'
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzy-native.nvim'
-Plug 'sharkdp/fd'
-Plug 'jremmen/vim-ripgrep'
-Plug 'prettier/vim-prettier', { 'do': 'npm install' }
-Plug 'stefandtw/quickfix-reflector.vim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install}}
-Plug 'mattn/emmet-vim'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'SirVer/ultisnips'
-Plug 'hrsh7th/nvim-compe'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'neovim/nvim-lspconfig'
-Plug 'zacharydscott/float-term.nvim'
-Plug 'kristijanhusak/orgmode.nvim'
-Plug 'zacharydscott/hatchet.nvim'
-Plug 'APZelos/blamer.nvim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'kyazdani42/nvim-web-devicons' " for file icons
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'windwp/nvim-autopairs'
-Plug 'github/copilot.vim'
-call plug#end()
 
 """" External Files
 " source ./custom-text.vim
 so $XDG_CONFIG_HOME/nvim/lua/config.vim
-lua require('config')
+]],true)
+-- require('config')
+vim.api.nvim_exec([[
 set clipboard=unnamed
 
 let s:clip = '/mnt/c/Windows/System32/clip.exe' 
@@ -78,8 +87,9 @@ end
 """ Basics
 let g:nvcode_termcolors=256
 let USER_NAME = 'Zachary Scott'
-hi link FloatTermDefaultTab Normal
-hi link FloatTermSelectTab Cursor
+let g:copilot_enabled = 1
+" hi link FloatTermDefaultTab Normal
+" hi link FloatTermSelectTab Cursor
 " hi link FloatTermDefaultTab Normal |hi link FloatTermSelectTab Cursor
 syntax on
 cnoreabbrev h vert bo h
@@ -150,10 +160,10 @@ syntax on
 
 
 " checks if your terminal has 24-bit color support
-if (has("termguicolors"))
-	set termguicolors
-	hi LineNr ctermbg=NONE guibg=NONE
-endif
+" if (has("termguicolors"))
+" 	set termguicolors
+" 	hi LineNr ctermbg=NONE guibg=NONE
+" endif
 " augroup GuiPopupmenu
 " 	au VimEnter * GuiPopupmenu 0
 " augroup end
@@ -171,54 +181,54 @@ augroup END
 " hi Normal guibg=NONE ctermbg=NONE
 
 "" Angular Splits
-nnoremap n j
-nnoremap e k
-nnoremap i l
-
-nnoremap N J
-nnoremap E K
-nnoremap I L
-
-nnoremap j e
-nnoremap k n
-nnoremap l i
-
-nnoremap J E
-nnoremap K N
-nnoremap L I
-
-vnoremap n j
-vnoremap e k
-" vnoremap i l
-
-vnoremap N J
-vnoremap E K
-" vnoremap I L
-
-vnoremap j e
-vnoremap k n
-" vnoremap l i
-
-vnoremap J E
-vnoremap K N
-" vnoremap L I
-
-nnoremap gn gj
-nnoremap ge gk
-nnoremap gi gl
-
-nnoremap gN gJ
-nnoremap gE gK
-nnoremap gI gL
-
-nnoremap gj ge
-nnoremap gk gn
-nnoremap gl gi
-
-nnoremap gJ gE
-nnoremap gK gN
-nnoremap gL gI
-
+" nnoremap n j
+" nnoremap e k
+" nnoremap i l
+" 
+" nnoremap N J
+" nnoremap E K
+" nnoremap I L
+" 
+" nnoremap j e
+" nnoremap k n
+" nnoremap l i
+" 
+" nnoremap J E
+" nnoremap K N
+" nnoremap L I
+" 
+" vnoremap n j
+" vnoremap e k
+" " vnoremap i l
+" 
+" vnoremap N J
+" vnoremap E K
+" " vnoremap I L
+" 
+" vnoremap j e
+" vnoremap k n
+" " vnoremap l i
+" 
+" vnoremap J E
+" vnoremap K N
+" " vnoremap L I
+" 
+" nnoremap gn gj
+" nnoremap ge gk
+" nnoremap gi gl
+" 
+" nnoremap gN gJ
+" nnoremap gE gK
+" nnoremap gI gL
+" 
+" nnoremap gj ge
+" nnoremap gk gn
+" nnoremap gl gi
+" 
+" nnoremap gJ gE
+" nnoremap gK gN
+" nnoremap gL gI
+" 
 nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
 nnoremap <Leader>xt :call AngularVsplitMatch("ts","v")<CR>
 nnoremap <Leader>xd :call AngularVsplitMatch("spec.ts","v")<CR>
@@ -341,7 +351,6 @@ let &t_EI = "\<esc>[2 q"
 
 """" plugin configuration
 """ Emmet
-let g:user_emmet_leader_key="<C-Y>"
 """" File Auto Commands
 augroup VIM
   autocmd!
@@ -372,13 +381,13 @@ augroup MD
 augroup END
 
 set cursorline
-hi cursorline cterm=none term=none
+" hi cursorline cterm=none term=none
 augroup CURSOR_LINE
 autocmd WinEnter * setlocal cursorline
 autocmd WinLeave * setlocal nocursorline
 augroup END
-highlight CursorLine guibg=#292929 ctermbg=234
-highlight Cursor guibg=#292929 ctermbg=234 guifg=#000000 ctermfg=Black
+" highlight CursorLine guibg=#292929 ctermbg=234
+" highlight Cursor guibg=#292929 ctermbg=234 guifg=#000000 ctermfg=Black
 
 augroup MISC
   autocmd!
@@ -392,10 +401,10 @@ augroup MISC
   "       \ inoremap <A-n> <C-\><C-n>
 " augroup END
 
-augroup ColorSchemeWatcher
-    autocmd!
-    autocmd ColorScheme * call MakeColorChanges()
-augroup END
+"augroup ColorSchemeWatcher
+"    autocmd!
+"    autocmd ColorScheme * call MakeColorChanges()
+"augroup END
 
 function! RemoveItalicFromHighlightCommand(somestring)
     let cmd=a:somestring
@@ -431,7 +440,7 @@ function! True_False_Toggle()
 	let l:old=@"
 	let l:pos = getpos('.')
 	normal! yiw
-	let @" = get({'false': 'true', 'true': 'false', 'False': 'True', 'True': 'False'}, @", 'fail')
+	let @" = get({'false': 'true', 'true': 'false', 'False': 'True', 'True': 'False', '||': '&&', '&&': '||', '|': '&'}, @", 'fail')
 	if @" ==# 'fail'
 		normal! 
 		let @"=l:old
@@ -454,9 +463,10 @@ function! AngularVsplitMatch(targ, direction)
   elseif (a:direction =~ "h")
     execute "split ".path
   else
-    execute "e ".path
-  endif
+    execute "edit ".path
+endif
 endfunction
+
 
 function! AngularVsplitMatchDefault(direction)
   if (match(expand("%"),"\.html$") =~ -1)
@@ -480,8 +490,15 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
-colorscheme gruvbox
-hi link FloatTermDefaultTab Normal
-hi link FloatTermSelectTab Cursor
-hi link FloatBorder NONE
+"" colorscheme gruvbox
+" hi link FloatTermDefaultTab Normal
+" hi link FloatTermSelectTab Cursor
+" hi link FloatBorder NONE
 " hi Search guibg=#FAE060
+ hi TelescopeNormal guibg=#313131
+hi Terminal guibg=#313131
+]],true)
+vim.cmd.filetype("on")
+vim.cmd.filetype("plugin on")
+vim.g.gruvbox_baby_telescope_theme = 1;
+require('config')
