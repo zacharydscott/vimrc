@@ -6,8 +6,19 @@
 --     \ \__\   \ \__\\ \__\   \ \__\       \ \__\  |\__\  \ \_______\   \ \_______\   \ \__\ \__\
 --      \|__|    \|__| \|__|    \|__|        \|__|   \|__|  \|_______|    \|_______|    \|__|\|__|
 
+-- Setting globals used in the config
+opts = {noremap = true, silent = true}
+buf_opts = {noremap = true, silent = true, buffer = true}
+loudopts = {noremap = true, silent = false}
+exopts = {noremap = true, expr = true, silent = true}
+nsk = vim.keymap.set
+set = vim.api.nvim_set_option
+keyset = vim.keymap.set;
+
 vim.g.user_emmet_leader_key="<A-y>"
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+vim.g.vimwiki_list = {{path= '~/documents/vimwiki/', syntax= 'markdown', ext= '.md'}}
+vim.g.vimwiki_key_mappings = {all_maps = 0}
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git",
@@ -18,6 +29,10 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
+vim.cmd.filetype("on")
+vim.cmd.filetype("plugin on")
+vim.g.gruvbox_baby_telescope_theme = 1;
+-- vim.g.gruvbox_baby_transparent_mode = 1
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	"kyazdani42/nvim-web-devicons",
@@ -26,16 +41,16 @@ require("lazy").setup({
 	"nvim-lua/plenary.nvim",
 	"nvim-lua/popup.nvim",
 	"tomtom/tlib_vim",
-	"nvim-treesitter/nvim-treesitter",
+	{"nvim-treesitter/nvim-treesitter", tag = "v0.9.0"},
 	"nvim-treesitter/playground",
 	"nvim-treesitter/nvim-treesitter-textobjects",
 	"nvim-telescope/telescope.nvim",
 	"nvim-telescope/telescope-fzy-native.nvim",
 	"jremmen/vim-ripgrep",
-	"prettier/vim-prettier",
 	"mattn/emmet-vim",
 	"SirVer/ultisnips",
 	"neovim/nvim-lspconfig",
+	"hrsh7th/nvim-compe",
 	"kyazdani42/nvim-tree.lua",
 	"windwp/nvim-autopairs",
 	"github/copilot.vim",
@@ -50,6 +65,10 @@ require("lazy").setup({
 	"rcarriga/nvim-dap-ui",
 	"luisiacc/gruvbox-baby",
 	"mxsdev/nvim-dap-vscode-js",
+	"vimwiki/vimwiki",
+	"neovim/nvim-lspconfig",
+	"jose-elias-alvarez/null-ls.nvim",
+	"MunifTanjim/prettier.nvim"
 })
 
 vim.api.nvim_exec([[
@@ -180,55 +199,6 @@ augroup END
 " colorscheme gruvbox
 " hi Normal guibg=NONE ctermbg=NONE
 
-"" Angular Splits
-" nnoremap n j
-" nnoremap e k
-" nnoremap i l
-" 
-" nnoremap N J
-" nnoremap E K
-" nnoremap I L
-" 
-" nnoremap j e
-" nnoremap k n
-" nnoremap l i
-" 
-" nnoremap J E
-" nnoremap K N
-" nnoremap L I
-" 
-" vnoremap n j
-" vnoremap e k
-" " vnoremap i l
-" 
-" vnoremap N J
-" vnoremap E K
-" " vnoremap I L
-" 
-" vnoremap j e
-" vnoremap k n
-" " vnoremap l i
-" 
-" vnoremap J E
-" vnoremap K N
-" " vnoremap L I
-" 
-" nnoremap gn gj
-" nnoremap ge gk
-" nnoremap gi gl
-" 
-" nnoremap gN gJ
-" nnoremap gE gK
-" nnoremap gI gL
-" 
-" nnoremap gj ge
-" nnoremap gk gn
-" nnoremap gl gi
-" 
-" nnoremap gJ gE
-" nnoremap gK gN
-" nnoremap gL gI
-" 
 nnoremap <Leader>xh :call AngularVsplitMatch("html","v")<CR>
 nnoremap <Leader>xt :call AngularVsplitMatch("ts","v")<CR>
 nnoremap <Leader>xd :call AngularVsplitMatch("spec.ts","v")<CR>
@@ -313,7 +283,7 @@ endfunction
 
 function! NextPair(ch1,ch2,in,omap)
 	let l:search = @/
-	execute "normal! /".a:ch1.""
+	execute "normal! /".a:ch1.""
 	let @/ = l:search
 	if a:omap && matchstr(getline('.'), '\%'.(col('.')+1).'c.') == a:ch2
 		normal! a<space><esc>
@@ -323,7 +293,7 @@ endfunction
 
 function LastPair(ch1,ch2,in,omap)
 	let l:search = @/
-	execute "normal! ?".a:ch1.""
+	execute "normal! ?".a:ch1.""
 	let @/ = l:search
 	if a:omap && matchstr(getline('.'), '\%'.(col('.')-1).'c.') == a:ch1
 		normal! i<space><esc>
@@ -356,11 +326,6 @@ augroup VIM
   autocmd!
   autocmd BufWritePost *.tex execute(':! pdflatex '..@%)
   " autocmd BufWritePost *.lua :luafile %
-augroup END
-
-augroup JS
-  autocmd!
-  autocmd BufWritePre *.ts :Prettier<CR>
 augroup END
 
 augroup HTML
@@ -495,10 +460,44 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 " hi link FloatTermSelectTab Cursor
 " hi link FloatBorder NONE
 " hi Search guibg=#FAE060
- hi TelescopeNormal guibg=#313131
-hi Terminal guibg=#313131
+hi TelescopeNormal guibg=#313131
+"hi Terminal guibg=#313131
+
 ]],true)
 vim.cmd.filetype("on")
 vim.cmd.filetype("plugin on")
+
+function printDeepTable(table, space)
+	if not space then space = '' end
+	for n,v in pairs(table) do
+		if type(v) == 'table' then
+			print(space..n..': {')
+			printDeepTable(v,space..'  ')
+			print('}')
+		else
+			print(space..n..': ',v)
+		end
+	end
+end
+
+require('nvim-autopairs').setup{map_cr= true}
+require('telescopic')
+require('settings')
+require('treesitter')
+require('mappings')
+require('treeline')
+require('git')
+require('nvim-tree-config')
+require('lsp')
+require('color')
+require('hatchet-config')
+-- vim.api.nvim_command('echo "Hello, from the config file!"')
+require('term-float-config')
+require('lua-map')
+require('hop-config')
+require('dap-config')
 vim.g.gruvbox_baby_telescope_theme = 1;
-require('config')
+vim.g.gruvbox_baby_transparent_mode = 0;
+vim.g.gruvbox_baby_keyword_style = 'NONE'
+vim.g.gruvbox_baby_comment_style = 'NONE'
+vim.cmd("colorscheme gruvbox-baby")

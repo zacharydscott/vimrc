@@ -1,5 +1,21 @@
 require'nvim-treesitter-textobjects'
-require "nvim-treesitter.configs".setup {
+require'nvim-treesitter.configs'.setup {
+	-- ensure_installed = 'maintained',
+	highlight = {
+		enable = true,
+	},
+	indent = {
+		endable = true
+	},
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = "<Leader>,s",
+			node_incremental = "<Leader>,n",
+			scope_incremental = "<Leader>,c",
+			node_decremental = "<Leader>,m",
+		},
+	},
 	playground = {
 		enable = true,
 		disable = {},
@@ -16,24 +32,6 @@ require "nvim-treesitter.configs".setup {
 			update = 'R',
 			goto_node = '<cr>',
 			show_help = '?',
-		},
-	}
-}
-require'nvim-treesitter.configs'.setup {
-	-- ensure_installed = 'maintained',
-	highlight = {
-		enable = true,
-	},
-	indent = {
-		endable = true
-	},
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "<Leader>,s",
-			node_incremental = "<Leader>,n",
-			scope_incremental = "<Leader>,c",
-			node_decremental = "<Leader>,m",
 		},
 	},
 	textobjects = {

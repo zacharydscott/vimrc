@@ -1,7 +1,8 @@
 opts = {noremap = true, silent = true}
+buf_opts = {noremap = true, silent = true, buffer = true}
 loudopts = {noremap = true, silent = false}
 exopts = {noremap = true, expr = true, silent = true}
-nsk = vim.api.nvim_set_keymap
+nsk = vim.keymap.set
 set = vim.api.nvim_set_option
 keyset = vim.keymap.set;
 

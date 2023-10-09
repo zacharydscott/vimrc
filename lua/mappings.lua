@@ -72,6 +72,17 @@ nsk('n','<Leader>R',':Rg -i -F ""<Left>',loudopts)
 nsk('n','<Leader>c','yiw:Rg -i ""<Left><c-r>"<CR>',loudopts)
 nsk('n','<Leader>C','yiW:Rg -i ""<Left><c-r>"<CR>',loudopts)
 
+--- Vimwiki
+nsk('n', '<Leader>uu', ':VimwikiIndex<CR>',opts)
+nsk('n', '<Leader>ut', ':VimwikiTabIndex<CR>',opts)
+nsk('n', '<Leader>us', ':VimwikiUISelect<CR>',opts)
+nsk('n', '<Leader>ui', ':VimwikiDiaryIndex<CR>',opts)
+nsk('n', '<Leader>uc', ':VimwikiColorize<CR>',opts)
+nsk('n', '<Leader>un', ':VimwikiGoto<CR>',opts)
+nsk('n', '<Leader>ud', ':VimwikiDeleteFile<CR>',opts)
+nsk('n', '<Leader>ur', ':VimwikiRenameFile<CR>',opts)
+nsk('n', '<Leader>ui', ':VimwikiIndex<CR>',opts)
+
 --- Misc.
 nsk('n','<Backspace>',':',loudopts)
 nsk('n','<Leader>a','ggVG',opts)

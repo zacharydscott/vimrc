@@ -33,12 +33,36 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '[e', '<cmd>lua vim.diagnostic.goto_prev({severity= vim.diagnostic.severity.ERROR})<CR>', opts)
 	buf_set_keymap('n', ']e', '<cmd>lua vim.diagnostic.goto_next({severity= vim.diagnostic.severity.ERROR})<CR>', opts)
 	buf_set_keymap('n', '<space>li', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+	vim.keymap.set('n', '<space>f', function()
+		vim.lsp.buf.format { async = true }
+	end, opts)
 	-- buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
 require'lspconfig'.tsserver.setup{
 	on_attach = on_attach
 }
+local lspconfig = require'lspconfig'
+local configs = require 'lspconfig.configs'
+-- if not configs.snyk then
+-- 	configs.snyk = {
+-- 		default_config = {
+-- 			cmd = {'/usr/local/bin/snyk-ls','-f','/path/to/log/snyk-ls-vim.log'},
+-- 			root_dir = function(name)
+-- 				return lspconfig.util.find_git_ancestor(name) or vim.loop.os_homedir()
+-- 			end,
+-- 			init_options = {
+-- 				activateSnykCode = "true",
+-- 				activateSnykIac = "false",
+-- 				cliPath = "/home/zscott/.config/nvm/versions/node/v14.19.1/bin/snyk",
+-- 				token = "b62ee5a3-9425-4a1a-b03f-f4437d35beaf"
+-- 			}
+-- 		};
+-- 	}
+-- end
+-- lspconfig.snyk.setup {
+--   on_attach = on_attach
+-- }
 local default_node_modules = vim.fn.getcwd() .. "/node_modules"
 local ngls_cmd = {
   "ngserver",
@@ -50,6 +74,7 @@ local ngls_cmd = {
   "--experimental-ivy",
 }
 
+require'lspconfig'.gopls.setup{ }
 require'lspconfig'.angularls.setup({
   -- cmd = ngls_cmd,
   -- on_new_config = function(new_config)
@@ -58,6 +83,10 @@ require'lspconfig'.angularls.setup({
   -- on_attach = on_attach,
   -- on_attach = capabilities,
 })
+require'lspconfig'.clangd.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
 require'lspconfig'.pyright.setup{}
 require'lspconfig'.gopls.setup{
 	on_attach = on_attach,
@@ -91,41 +120,41 @@ for _, lsp in ipairs(servers) do
 end
 
 --- Compe setup
--- require'compe'.setup {
--- 	enabled = true;
--- 	autocomplete = true;
--- 	debug = false;
--- 	min_length = 2;
--- 	preselect = 'enable';
--- 	throttle_time = 100;
--- 	source_timeout = 200;
--- 	incomplete_delay = 400;
--- 	max_abbr_width = 100;
--- 	max_kind_width = 100;
--- 	max_menu_width = 100;
--- 	documentation = true;
+require'compe'.setup {
+	enabled = true;
+	autocomplete = true;
+	debug = false;
+	min_length = 2;
+	preselect = 'enable';
+	throttle_time = 100;
+	source_timeout = 200;
+	incomplete_delay = 400;
+	max_abbr_width = 100;
+	max_kind_width = 100;
+	max_menu_width = 100;
+	documentation = true;
 
--- 	source = {
--- 		path = true;
--- 		buffer = true;
--- 		calc = true;
--- 		nvim_lsp = true;
--- 		nvim_lua = true;
--- 		vsnip = false;
--- 		orgmode = true;
--- 		ultisnips = true;
--- 	};
--- }
+	source = {
+		path = true;
+		buffer = true;
+		calc = true;
+		nvim_lsp = true;
+		nvim_lua = true;
+		vsnip = false;
+		orgmode = true;
+		ultisnips = true;
+	};
+}
 
 --compe
 -- TODO: fix this laziness
--- nsk('i', '<c-Space>', 'compe#complete()',exopts)
--- nsk('i', '<CR>', 'compe#confirm(\'<CR>\')',exopts)
--- -- nsk('i', '<c-t>', 'pumvisible() ? compe#close() : "<c-t>" ',exopts)
--- -- api.nvim_set_keymap('i', '<c-e>', '<C-p>',opts)
--- nsk('i', '<c-f>', 'compe#scroll({\'delta\': +4})',exopts)
--- nsk('i', '<c-b>', 'compe#scroll({\'delta\': -4})',exopts)
--- nsk('n','<Leader>U',':vs | UltiSnipsEdit<CR>',opts)
+nsk('i', '<c-Space>', 'compe#complete()',exopts)
+nsk('i', '<CR>', 'compe#confirm(\'<CR>\')',exopts)
+-- nsk('i', '<c-t>', 'pumvisible() ? compe#close() : "<c-t>" ',exopts)
+-- api.nvim_set_keymap('i', '<c-e>', '<C-p>',opts)
+nsk('i', '<c-f>', 'compe#scroll({\'delta\': +4})',exopts)
+nsk('i', '<c-b>', 'compe#scroll({\'delta\': -4})',exopts)
+nsk('n','<Leader>U',':vs | UltiSnipsEdit<CR>',opts)
 
 
 local t = function(str)

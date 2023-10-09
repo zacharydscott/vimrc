@@ -8,7 +8,6 @@ require'nvim-tree'.setup {
   view = {
 	  mappings	= {
 		  list = {
-			  {key = "e", action = ""}
 		  }
 	  }
   },
