@@ -69,6 +69,7 @@ nsk('n','<Leader>s',':%s//g<left><Left>',loudopts)
 nsk('v','<Leader>s',':s//g<left><Left>',loudopts)
 nsk('n','<Leader>r',':Rg -i ""<Left>',loudopts)
 nsk('n','<Leader>R',':Rg -i -F ""<Left>',loudopts)
+nsk('v','<Leader>r','y:Rg -i "<C-r>""<CR>',loudopts)
 nsk('n','<Leader>c','yiw:Rg -i ""<Left><c-r>"<CR>',loudopts)
 nsk('n','<Leader>C','yiW:Rg -i ""<Left><c-r>"<CR>',loudopts)
 
@@ -99,12 +100,18 @@ nsk('n','<A-c>',':if g:copilot_enabled | let g:copilot_enabled = 0 | else | let 
 -- I'm in love with this
 nsk('n','<Leader>dn',':let json_count += 1<cr> :execute "vs JSON_".json_count<CR>ggVG"_dp:%!python -m json.tool<CR>',opts)
 nsk('v','<Leader>dn','y:let json_count += 1<cr> :execute "vs JSON_".json_count<CR>ggVG"_dp:%!python -m json.tool<CR>',opts)
+-- Copy stuff to clipboard
+nsk('n','<Leader>;p',':let @+=expand("%")<CR>',opts)
+nsk('n','<Leader>;h',':let @+=expand("%:h")<CR>',opts)
+nsk('n','<Leader>;t',':let @+=expand("%:t")<CR>',opts)
 
 ---- Command Mappings
 nsk('i','<C-s>','<C-r>"',loudopts)
 api.nvim_exec('command! Reload execute ":so $XDG_CONFIG_HOME/nvim/init.vim"',true)
 api.nvim_exec('command! Config execute ":e $XDG_CONFIG_HOME/nvim/init.vim"',true)
 api.nvim_exec('command! MoveConfig execute ":cd $XDG_CONFIG_HOME/nvim"',true)
+
+nsk('n','<Leader>or',':cdo %s//g<Left><Left>')
 
 nsk('n','<Leader>kc',':Config<CR>',opts)
 nsk('n','<Leader>ks',':SnipMateOpenSnippetFiles<CR>',opts)

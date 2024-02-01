@@ -1,0 +1,14 @@
+snippet dal "Dal Method"
+cl->api: get $1
+activate api
+api->dal: $2, $3
+dal->uni: get data
+dal<--uni: $1
+api<--dal: $1
+cl<--api: $1
+deactivate api
+endsnippet
+
+snippet nav "navigate to pae"
+cl->cl: navigate to $1
+endsnippet

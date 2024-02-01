@@ -148,8 +148,9 @@ require'compe'.setup {
 
 --compe
 -- TODO: fix this laziness
-nsk('i', '<c-Space>', 'compe#complete()',exopts)
+nsk('i', '<C-Space>', 'compe#complete()',exopts)
 nsk('i', '<CR>', 'compe#confirm(\'<CR>\')',exopts)
+nsk('i', '<C-t>', 'compe#confirm(\'<CR>\')',exopts)
 -- nsk('i', '<c-t>', 'pumvisible() ? compe#close() : "<c-t>" ',exopts)
 -- api.nvim_set_keymap('i', '<c-e>', '<C-p>',opts)
 nsk('i', '<c-f>', 'compe#scroll({\'delta\': +4})',exopts)
@@ -196,10 +197,23 @@ _G.s_tab_complete = function()
 	end
 end
 
+-- _G.s_selection = function()
+-- 	if vim.fn.pumvisible() == 1 then
+-- 		return t "<C-p>"
+-- 		-- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+-- 		--   return t "<Plug>(vsnip-jump-prev)"
+-- 	else
+-- 		-- If <S-Tab> is not working in your terminal, change it to <C-h>
+-- 		return t "<S-Tab>"
+-- 	end
+-- end
+
 api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", exopts)
 api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", exopts)
 api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", exopts)
 api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", exopts)
+-- api.nvim_set_keymap("s", "<c-space>", "v:lua.s_selection()", exopts)
+-- api.nvim_set_keymap("i", "<c-space>", "v:lua.s_selection()", exopts)
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true

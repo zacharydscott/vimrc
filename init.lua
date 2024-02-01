@@ -32,7 +32,6 @@ end
 vim.cmd.filetype("on")
 vim.cmd.filetype("plugin on")
 vim.g.gruvbox_baby_telescope_theme = 1;
--- vim.g.gruvbox_baby_transparent_mode = 1
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	"kyazdani42/nvim-web-devicons",
@@ -46,7 +45,7 @@ require("lazy").setup({
 	"nvim-treesitter/nvim-treesitter-textobjects",
 	"nvim-telescope/telescope.nvim",
 	"nvim-telescope/telescope-fzy-native.nvim",
-	"jremmen/vim-ripgrep",
+	"duane9/nvim-rg",
 	"mattn/emmet-vim",
 	"SirVer/ultisnips",
 	"neovim/nvim-lspconfig",
@@ -67,9 +66,33 @@ require("lazy").setup({
 	"mxsdev/nvim-dap-vscode-js",
 	"vimwiki/vimwiki",
 	"neovim/nvim-lspconfig",
+    "stefandtw/quickfix-reflector.vim",
 	"jose-elias-alvarez/null-ls.nvim",
-	"MunifTanjim/prettier.nvim"
+	"MunifTanjim/prettier.nvim",
+    "rhysd/conflict-marker.vim",
+    {
+        "jackMort/ChatGPT.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("chatgpt").setup()
+        end,
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "folke/trouble.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    }
 })
+
+local python3_host_prog = vim.fn.expand('$USERPROFILE/venv/neovim3/Scripts/python.exe')
+if vim.fn.filereadable(vim.fn.fnameescape(python3_host_prog)) then
+    vim.g.python3_host_prog = vim.fn.fnameescape(python3_host_prog)
+elseif vim.fn.filereadable(vim.fn.fnameescape('bin/python3.10')) then
+    vim.g.python3_host_prog = vim.fn.fnameescape('bin/python3.10')
+else
+    vim.g.python3_host_prog = nil
+end
 
 vim.api.nvim_exec([[
 let s:python3_host_prog = expand('$USERPROFILE\venv\neovim3\Scripts\python.exe')
@@ -118,7 +141,7 @@ cnoreabbrev h vert bo h
 "     set termguicolors
 "     hi LineNr ctermbg=NONE guibg=NONE
 " endif
-set autoindent noexpandtab tabstop=4 shiftwidth=4
+set autoindent expandtab tabstop=4 shiftwidth=4
 set wildignore+=node_modules/**
 set number
 " set number relativenumber
@@ -223,15 +246,6 @@ nnoremap <Leader>zc :call AngularVsplitMatch("css","n")<CR>
 nnoremap <Leader>zz :call AngularVsplitMatchDefault("n")<CR>
 nnoremap <Leader>z :call AngularVsplitMatchDefault("n")<CR>
 
-onoremap ia i(
-onoremap aa a(
-onoremap ir i{
-onoremap ar a{
-onoremap iz i<
-onoremap az a<
-onoremap ix i[
-onoremap ax a[
-
 vnoremap lja :<c-u>call NextPair('(',')','i',0)<cr>
 onoremap lja :<c-u>call NextPair('(',')','i',1)<cr>
 vnoremap aja :<c-u>call nextPair('(',')','a',0)<cr>
@@ -273,6 +287,66 @@ vnoremap aiz :<c-u>call LastPair('<','>','a',0)<cr>
 onoremap aiz :<c-u>call LastPair('<','>','a',1)<cr>
 
 nnoremap <Leader>/ :set opfunc=SearchObject<cr>g@
+
+nnoremap vir vi{
+nnoremap via vi(
+nnoremap vin vi<
+nnoremap vit vi]
+
+nnoremap cir ci{
+nnoremap cia ci(
+nnoremap cin ci<
+nnoremap cit ci]
+
+nnoremap dir di{
+nnoremap dia di(
+nnoremap din di<
+nnoremap dit di]
+
+nnoremap var va{
+nnoremap vaa va(
+nnoremap van va<
+nnoremap vat va]
+
+nnoremap car ca{
+nnoremap caa ca(
+nnoremap can ca<
+nnoremap cat ca]
+
+nnoremap dar da{
+nnoremap daa da(
+nnoremap dan da<
+nnoremap dat da]
+
+vnoremap vir vi{
+vnoremap via vi(
+vnoremap vin vi<
+vnoremap vit vi]
+
+vnoremap cir ci{
+vnoremap cia ci(
+vnoremap cin ci<
+vnoremap cit ci]
+
+vnoremap dir di{
+vnoremap dia di(
+vnoremap din di<
+vnoremap dit di]
+
+vnoremap var va{
+vnoremap vaa va(
+vnoremap van va<
+vnoremap vat va]
+
+vnoremap car ca{
+vnoremap caa ca(
+vnoremap can ca<
+vnoremap cat ca]
+
+vnoremap dar da{
+vnoremap daa da(
+vnoremap dan da<
+vnoremap dat da]
 
 function! SearchObject(a)
 	let save = @"
@@ -462,8 +536,8 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 " hi Search guibg=#FAE060
 hi TelescopeNormal guibg=#313131
 "hi Terminal guibg=#313131
-
 ]],true)
+
 vim.cmd.filetype("on")
 vim.cmd.filetype("plugin on")
 
@@ -501,3 +575,11 @@ vim.g.gruvbox_baby_transparent_mode = 0;
 vim.g.gruvbox_baby_keyword_style = 'NONE'
 vim.g.gruvbox_baby_comment_style = 'NONE'
 vim.cmd("colorscheme gruvbox-baby")
+
+vim.api.nvim_exec([[
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm(luaeval("require 'nvim-autopairs'.autopairs_cr()"))
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+]],true)

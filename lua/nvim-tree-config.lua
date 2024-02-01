@@ -5,12 +5,6 @@ require'nvim-tree'.setup {
   renderer = {
     group_empty = true,
   },
-  view = {
-	  mappings	= {
-		  list = {
-		  }
-	  }
-  },
   filters = {
     dotfiles = true,
   },}

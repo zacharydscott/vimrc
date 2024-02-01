@@ -19,6 +19,7 @@ function printDeepTable(table, space)
 	end
 end
 
+require('prettier-config')
 require('settings')
 require('treesitter')
 require('telescopic')
